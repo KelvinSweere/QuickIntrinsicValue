@@ -13,7 +13,7 @@ const CalculatorOutputValues = ({
 }: ICalculatorOutputValuesProps) => {
   return (
     <Box mt={4} bg="white">
-      <Table variant="simple" colorScheme="blue">
+      <Table variant="simple" colorScheme="red">
         <Thead>
           <Tr>
             <Th textAlign="center">Stock price</Th>
@@ -28,7 +28,7 @@ const CalculatorOutputValues = ({
               {modelParameters.pricePerShare}
             </Td>
             <Td textAlign="center" bg="white">
-              {intrinsicValue.intristicValue}
+              {intrinsicValue.intrinsicValue}
             </Td>
             <Td textAlign="center" bg="white">
               {intrinsicValue.acceptableBuyPrice}

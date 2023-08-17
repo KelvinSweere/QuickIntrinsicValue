@@ -6,7 +6,7 @@ import {
   IModelParameters,
   defaultModelParameters,
 } from '@/types/model-parameters';
-import { Box, Button, Container, Heading } from '@chakra-ui/react';
+import { Box, Button, Container, Heading, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { calculateIntrinsicValue } from '../../utils/calculator-service';
 import CalculatorInputForm from './calculator-input-form';
@@ -42,17 +42,32 @@ const IntrinsicValueCalculator = () => {
     setIntrinsicValue(defaultIntrinsicValue);
   };
 
-  return (
-    <Container
-      display="flex"
-      flexDir="column"
-      mt={8}
-      maxW="xl"
-      bg="gray.200"
-      p={4}
-      gap="1rem"
+  const GradientText: React.FC<{ children: React.ReactNode }> = ({
+    children,
+  }) => (
+    <Box
+      as="span"
+      fontWeight="bold"
+      bgGradient="linear(to-l, red.300, red.500)"
+      bgClip="text"
+      whiteSpace="nowrap"
     >
-      <Heading textAlign="center">Calculator</Heading>
+      {children}
+    </Box>
+  );
+
+  return (
+    <Container display="flex" flexDir="column" w="100vw" p={4} gap="1rem">
+      <Box textAlign="center">
+        <Heading fontSize="4xl" fontWeight="bold" mb={4}>
+          <GradientText>Graham Formula Calculator</GradientText>
+        </Heading>
+        <Text fontSize="xl" color="gray.600">
+          Unlock the potential of stock valuation with our Graham Formula
+          Calculator. Effortlessly compute the intrinsic value of stocks by
+          simply entering the Yahoo Finance stock symbol.
+        </Text>
+      </Box>
 
       <CalculatorInputForm
         stockSymbol={stockSymbol}
@@ -69,7 +84,7 @@ const IntrinsicValueCalculator = () => {
       />
 
       <Box display="flex" flexDir="column" gap={4}>
-        <Button type="button" colorScheme="blue" onClick={clearValues}>
+        <Button type="button" colorScheme="red" onClick={clearValues}>
           Clear
         </Button>
       </Box>

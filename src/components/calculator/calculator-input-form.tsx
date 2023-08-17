@@ -26,12 +26,8 @@ const CalculatorInputForm = ({
   };
 
   const tryToSetMarginOfSafety = (value: string) => {
-    const toast = useToast();
-
     const numericMarginValue = Number(value);
-    if (numericMarginValue > 0 && numericMarginValue <= 70) {
-      setMarginOfSafety(value);
-    } else if (numericMarginValue > 70) {
+    if (numericMarginValue > 70) {
       toast({
         title: 'Margin of safety too high',
         description: 'Margin of safety must be lower than 70%',
@@ -40,6 +36,7 @@ const CalculatorInputForm = ({
         isClosable: true,
       });
       setMarginOfSafety('70');
+      return;
     } else if (numericMarginValue < 0) {
       toast({
         title: 'Margin of safety too low',
@@ -49,7 +46,9 @@ const CalculatorInputForm = ({
         isClosable: true,
       });
       setMarginOfSafety('0');
+      return;
     }
+    setMarginOfSafety(value);
   };
 
   async function getYahooFinanceData() {
@@ -78,14 +77,18 @@ const CalculatorInputForm = ({
   return (
     <Box bg="white" p={4} rounded="md" fontWeight="bold">
       <label>
-        Stock ticker
+        Stock ticker (from Yahoo Finance)
         <div style={{ display: 'flex' }}>
           <Input
             type="text"
             value={stockSymbol}
             onChange={(e) => setStockSymbol(e.target.value)}
           />
-          <Button ml={4} onClick={calculateValues}>
+          <Button
+            ml={4}
+            onClick={calculateValues}
+            _hover={{ bg: 'red.500', color: 'white' }}
+          >
             Calculate
           </Button>
         </div>

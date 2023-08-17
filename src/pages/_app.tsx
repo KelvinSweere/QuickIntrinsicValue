@@ -10,6 +10,13 @@ const genericTheme = extendTheme({
   fonts: {
     text: 'Roboto, sans-serif',
   },
+  styles: {
+    global: {
+      body: {
+        bg: 'gray.100',
+      },
+    },
+  },
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
