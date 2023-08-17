@@ -1,5 +1,11 @@
+import IntrinsicValueCalculator from '../intrinsic-value-calculator';
+
 const LandingPage = () => {
-  return <></>;
+  return (
+    <>
+      <IntrinsicValueCalculator />
+    </>
+  );
 };
 
 export default LandingPage;
