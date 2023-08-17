@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
 import {
   ICalculatedModel,
   calculateIntrinsicValue,
@@ -59,14 +58,6 @@ const IntrinsicValueCalculator = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log('modelParameters', modelParameters);
-  }, [modelParameters]);
-
-  useEffect(() => {
-    console.log('intrinsicValue', intrinsicValue);
-  }, [intrinsicValue]);
-
   const calculateValues = async () => {
     await getYahooFinanceData();
   };
@@ -101,7 +92,8 @@ const IntrinsicValueCalculator = () => {
         duration: 2000,
         isClosable: true,
       });
-    } else if (numericMarginValue <= 0) {
+      setMarginOfSafety('70');
+    } else if (numericMarginValue < 0) {
       toast({
         title: 'Margin of safety too low',
         description: 'Margin of safety must be higher than 0%',
@@ -109,10 +101,15 @@ const IntrinsicValueCalculator = () => {
         duration: 2000,
         isClosable: true,
       });
+      setMarginOfSafety('0');
     }
   };
 
   async function getYahooFinanceData() {
+    if (stockSymbol === '') {
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await axios.get(
@@ -120,7 +117,13 @@ const IntrinsicValueCalculator = () => {
       );
       setModelParameters(response.data);
     } catch (error) {
-      console.error('Error fetching stock data:', error);
+      toast({
+        title: `Ticker '${stockSymbol}' not found`,
+        description: 'Please enter a valid yahoo finance ticker',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
     }
     setIsLoading(false);
   }
@@ -138,7 +141,7 @@ const IntrinsicValueCalculator = () => {
       <Heading textAlign="center">Calculator</Heading>
       <Box bg="white" p={4} rounded="md" fontWeight="bold">
         <label>
-          Stock Symbol
+          Stock ticker
           <div style={{ display: 'flex' }}>
             <Input
               type="text"
