@@ -21,10 +21,16 @@ export function calculateIntrinsicValue(
     ((parseFloat(value) - pricePerShare) / pricePerShare) *
     100
   ).toFixed(2);
-  const acceptableBuyPrice = (
+  const calculatedAcceptableBuyPrice = (
     parseFloat(value) *
     (marginOfSafety / 100)
   ).toFixed(2);
+
+  const acceptableBuyPrice =
+    parseFloat(calculatedAcceptableBuyPrice) > 0
+      ? calculatedAcceptableBuyPrice
+      : '0.00';
+
   const canBuy = pricePerShare <= parseFloat(acceptableBuyPrice);
   return {
     intristicValue: parseFloat(value),
