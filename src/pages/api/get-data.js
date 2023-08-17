@@ -18,7 +18,7 @@ export default async (req, res) => {
     return res.status(200).json({
       pricePerShare,
       earningsPerShare,
-      growthRate: growthRate * 100,
+      growthRate: (growthRate * 100).toFixed(2),
       currentYieldOfBond,
       currencySymbol,
     });
