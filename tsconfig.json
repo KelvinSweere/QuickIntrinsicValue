@@ -25,7 +25,8 @@
     "**/*.tsx",
     "src/components/navigation/navigation.tsx",
     "src/components/navigation/navigation.tsx",
-    "src/components/layout/layout.jsx"
+    "src/components/layout/layout.jsx",
+    "src/pages/api/get-data.js"
   ],
   "exclude": ["node_modules"]
 }

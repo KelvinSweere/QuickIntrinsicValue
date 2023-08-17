@@ -4,16 +4,17 @@ import {
   Container,
   Heading,
   Input,
+  Spinner,
   Table,
   Tbody,
   Td,
   Th,
   Thead,
   Tr,
+  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import {
   ICalculatedModel,
   calculateIntrinsicValue,
@@ -31,6 +32,7 @@ export interface IModelParameters {
   earningsPerShare: number;
   growthRate: number;
   currentYieldOfBond: number;
+  currencySymbol: string;
 }
 
 const defaultModelParameters: IModelParameters = {
@@ -38,11 +40,13 @@ const defaultModelParameters: IModelParameters = {
   earningsPerShare: 0,
   growthRate: 0,
   currentYieldOfBond: 0,
+  currencySymbol: '$',
 };
 
 const IntrinsicValueCalculator = () => {
   const [stockSymbol, setStockSymbol] = useState<string>('');
   const [marginOfSafety, setMarginOfSafety] = useState<string>('65');
+  const toast = useToast();
 
   const [modelParameters, setModelParameters] = useState<IModelParameters>(
     defaultModelParameters
@@ -52,8 +56,13 @@ const IntrinsicValueCalculator = () => {
     defaultIntrinsicValue
   );
 
-  const calculateValues = () => {
-    getYahooFinanceData();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const calculateValues = async () => {
+    await getYahooFinanceData();
+  };
+
+  useEffect(() => {
     setIntrinsicValue(
       calculateIntrinsicValue(
         Number(modelParameters.pricePerShare),
@@ -63,7 +72,7 @@ const IntrinsicValueCalculator = () => {
         Number(marginOfSafety)
       )
     );
-  };
+  }, [modelParameters]);
 
   const clearValues = () => {
     setStockSymbol('');
@@ -71,17 +80,52 @@ const IntrinsicValueCalculator = () => {
     setIntrinsicValue(defaultIntrinsicValue);
   };
 
+  const tryToSetMarginOfSafety = (value: string) => {
+    const numericMarginValue = Number(value);
+    if (numericMarginValue > 0 && numericMarginValue <= 70) {
+      setMarginOfSafety(value);
+    } else if (numericMarginValue > 70) {
+      toast({
+        title: 'Margin of safety too high',
+        description: 'Margin of safety must be lower than 70%',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+      setMarginOfSafety('70');
+    } else if (numericMarginValue < 0) {
+      toast({
+        title: 'Margin of safety too low',
+        description: 'Margin of safety must be higher than 0%',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+      setMarginOfSafety('0');
+    }
+  };
+
   async function getYahooFinanceData() {
-    setModelParameters(defaultModelParameters);
-    setIntrinsicValue(defaultIntrinsicValue);
+    if (stockSymbol === '') {
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `/api/get-data?stockSymbol=${stockSymbol}`
       );
       setModelParameters(response.data);
     } catch (error) {
-      console.error('Error fetching stock data:', error);
+      toast({
+        title: `Ticker '${stockSymbol}' not found`,
+        description: 'Please enter a valid yahoo finance ticker',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
     }
+    setIsLoading(false);
   }
 
   return (
@@ -97,7 +141,7 @@ const IntrinsicValueCalculator = () => {
       <Heading textAlign="center">Calculator</Heading>
       <Box bg="white" p={4} rounded="md" fontWeight="bold">
         <label>
-          Stock Symbol
+          Stock ticker
           <div style={{ display: 'flex' }}>
             <Input
               type="text"
@@ -109,69 +153,91 @@ const IntrinsicValueCalculator = () => {
             </Button>
           </div>
         </label>
+        <label>
+          Margin of safety (%)
+          <div style={{ display: 'flex' }}>
+            <Input
+              type="number"
+              pattern="^\d*(\.\d{0,2})?$"
+              value={marginOfSafety}
+              onChange={(e) => tryToSetMarginOfSafety(e.target.value)}
+            />
+          </div>
+        </label>
       </Box>
+
       <Box bg="white" p={4} rounded="md" fontWeight="bold">
-        <form>
-          <Box display="grid" gridGap={3}>
-            <label>
-              Price per share (PPS)
-              <Input
-                type="text"
-                pattern="^\d*(\.\d{0,2})?$"
-                value={modelParameters.pricePerShare}
-                onChange={(e) =>
-                  setModelParameters({
-                    ...modelParameters,
-                    pricePerShare: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </label>
-            <label>
-              Earnings per share (EPS)
-              <Input
-                type="text"
-                pattern="^\d*(\.\d{0,2})?$"
-                value={modelParameters.earningsPerShare}
-                onChange={(e) =>
-                  setModelParameters({
-                    ...modelParameters,
-                    earningsPerShare: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </label>
-            <label>
-              Growth rate (GR)
-              <Input
-                type="text"
-                pattern="^\d*(\.\d{0,2})?$"
-                value={modelParameters.growthRate}
-                onChange={(e) =>
-                  setModelParameters({
-                    ...modelParameters,
-                    growthRate: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </label>
-            <label>
-              Yield of bond (YB)
-              <Input
-                type="text"
-                pattern="^\d*(\.\d{0,2})?$"
-                value={modelParameters.currentYieldOfBond}
-                onChange={(e) =>
-                  setModelParameters({
-                    ...modelParameters,
-                    currentYieldOfBond: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </label>
+        {isLoading ? (
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Spinner />
           </Box>
-        </form>
+        ) : (
+          <>
+            <form>
+              <Box display="grid" gridGap={3}>
+                <label>
+                  Price per share (PPS)
+                  <div style={{ display: 'flex', fontWeight: 'normal' }}>
+                    <span
+                      style={{ alignSelf: 'center', marginRight: '0.5rem' }}
+                    >
+                      {modelParameters.currencySymbol}
+                    </span>
+                    <Input
+                      readOnly
+                      type="text"
+                      pattern="^\d*(\.\d{0,2})?$"
+                      value={modelParameters.pricePerShare}
+                    />
+                  </div>
+                </label>
+                <label>
+                  Earnings per share (EPS)
+                  <Input
+                    readOnly
+                    type="text"
+                    pattern="^\d*(\.\d{0,2})?$"
+                    value={modelParameters.earningsPerShare}
+                  />
+                </label>
+                <label>
+                  Growth rate avg. 5 years (GR)
+                  <div style={{ display: 'flex', fontWeight: 'normal' }}>
+                    <span
+                      style={{ alignSelf: 'center', marginRight: '0.5rem' }}
+                    >
+                      %
+                    </span>
+                    <Input
+                      readOnly
+                      type="text"
+                      pattern="^\d*(\.\d{0,2})?$"
+                      value={modelParameters.growthRate}
+                    />
+                  </div>
+                </label>
+                <label>
+                  Yield of AAA bond (YB)
+                  <div style={{ display: 'flex', fontWeight: 'normal' }}>
+                    <span
+                      style={{ alignSelf: 'center', marginRight: '0.5rem' }}
+                    >
+                      %
+                    </span>
+                    <Input
+                      readOnly
+                      type="text"
+                      pattern="^\d*(\.\d{0,2})?$"
+                      value={modelParameters.currentYieldOfBond}
+                    />
+                  </div>
+                </label>
+              </Box>
+            </form>
+          </>
+        )}
       </Box>
+
       <Box display="flex" flexDir="column" gap={4}>
         <Button type="button" colorScheme="blue" onClick={clearValues}>
           Clear
@@ -184,7 +250,6 @@ const IntrinsicValueCalculator = () => {
             <Tr>
               <Th textAlign="center">Stock price</Th>
               <Th textAlign="center">Intrinsic Value</Th>
-              {/* <Th textAlign="center">Difference</Th> */}
               <Th textAlign="center">Acceptable Buy Price</Th>
               <Th textAlign="center">Should Buy</Th>
             </Tr>
@@ -197,9 +262,6 @@ const IntrinsicValueCalculator = () => {
               <Td textAlign="center" bg="white">
                 {intrinsicValue.intristicValue}
               </Td>
-              {/* <Td textAlign="center" bg="white">
-                {intrinsicValue.differencePercentage} %
-              </Td> */}
               <Td textAlign="center" bg="white">
                 {intrinsicValue.acceptableBuyPrice}
               </Td>

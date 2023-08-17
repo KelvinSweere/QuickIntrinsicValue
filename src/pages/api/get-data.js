@@ -13,15 +13,16 @@ export default async (req, res) => {
       (x) => x.period === '+5y'
     )?.growth;
     const currentYieldOfBond = 2.57;
+    const currencySymbol = result.price.currencySymbol;
 
     return res.status(200).json({
       pricePerShare,
       earningsPerShare,
-      growthRate,
+      growthRate: (growthRate * 100).toFixed(2),
       currentYieldOfBond,
+      currencySymbol,
     });
   } catch (error) {
-    console.log('error ', error);
     return res
       .status(500)
       .json({ error: 'Failed to fetch data from Yahoo Finance' });
