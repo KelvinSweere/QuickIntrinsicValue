@@ -1,9 +1,4 @@
-export interface ICalculatedModel {
-  intristicValue: number;
-  differencePercentage: number;
-  acceptableBuyPrice: number;
-  canBuy: boolean;
-}
+import { ICalculatedModel } from '@/types/calculated-model';
 
 export function calculateIntrinsicValue(
   pricePerShare: number,
@@ -12,11 +7,13 @@ export function calculateIntrinsicValue(
   currentYieldOfBond: number,
   marginOfSafety: number
 ): ICalculatedModel {
-  const value = (
+  const calculateValue = (
     earningsPerShare *
     (7 + 1 * growthRate) *
     (4.4 / currentYieldOfBond)
   ).toFixed(2);
+  const value = parseFloat(calculateValue) > 0 ? calculateValue : '0.00';
+
   const differencePercentage = (
     ((parseFloat(value) - pricePerShare) / pricePerShare) *
     100
@@ -33,7 +30,7 @@ export function calculateIntrinsicValue(
 
   const canBuy = pricePerShare <= parseFloat(acceptableBuyPrice);
   return {
-    intristicValue: parseFloat(value),
+    intrinsicValue: parseFloat(value),
     differencePercentage: parseFloat(differencePercentage),
     acceptableBuyPrice: parseFloat(acceptableBuyPrice),
     canBuy,
