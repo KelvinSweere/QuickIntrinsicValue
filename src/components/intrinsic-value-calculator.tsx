@@ -4,6 +4,7 @@ import {
   Container,
   Heading,
   Input,
+  Spinner,
   Table,
   Tbody,
   Td,
@@ -31,6 +32,7 @@ export interface IModelParameters {
   earningsPerShare: number;
   growthRate: number;
   currentYieldOfBond: number;
+  currencySymbol: string;
 }
 
 const defaultModelParameters: IModelParameters = {
@@ -38,6 +40,7 @@ const defaultModelParameters: IModelParameters = {
   earningsPerShare: 0,
   growthRate: 0,
   currentYieldOfBond: 0,
+  currencySymbol: '$',
 };
 
 const IntrinsicValueCalculator = () => {
@@ -51,6 +54,8 @@ const IntrinsicValueCalculator = () => {
   const [intrinsicValue, setIntrinsicValue] = useState<ICalculatedModel>(
     defaultIntrinsicValue
   );
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const calculateValues = () => {
     getYahooFinanceData();
@@ -72,6 +77,7 @@ const IntrinsicValueCalculator = () => {
   };
 
   async function getYahooFinanceData() {
+    setIsLoading(true);
     setModelParameters(defaultModelParameters);
     setIntrinsicValue(defaultIntrinsicValue);
     try {
@@ -82,6 +88,7 @@ const IntrinsicValueCalculator = () => {
     } catch (error) {
       console.error('Error fetching stock data:', error);
     }
+    setIsLoading(false);
   }
 
   return (
@@ -110,68 +117,85 @@ const IntrinsicValueCalculator = () => {
           </div>
         </label>
       </Box>
+
       <Box bg="white" p={4} rounded="md" fontWeight="bold">
-        <form>
-          <Box display="grid" gridGap={3}>
-            <label>
-              Price per share (PPS)
-              <Input
-                type="text"
-                pattern="^\d*(\.\d{0,2})?$"
-                value={modelParameters.pricePerShare}
-                onChange={(e) =>
-                  setModelParameters({
-                    ...modelParameters,
-                    pricePerShare: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </label>
-            <label>
-              Earnings per share (EPS)
-              <Input
-                type="text"
-                pattern="^\d*(\.\d{0,2})?$"
-                value={modelParameters.earningsPerShare}
-                onChange={(e) =>
-                  setModelParameters({
-                    ...modelParameters,
-                    earningsPerShare: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </label>
-            <label>
-              Growth rate (GR)
-              <Input
-                type="text"
-                pattern="^\d*(\.\d{0,2})?$"
-                value={modelParameters.growthRate}
-                onChange={(e) =>
-                  setModelParameters({
-                    ...modelParameters,
-                    growthRate: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </label>
-            <label>
-              Yield of bond (YB)
-              <Input
-                type="text"
-                pattern="^\d*(\.\d{0,2})?$"
-                value={modelParameters.currentYieldOfBond}
-                onChange={(e) =>
-                  setModelParameters({
-                    ...modelParameters,
-                    currentYieldOfBond: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </label>
+        {isLoading ? (
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Spinner />
           </Box>
-        </form>
+        ) : (
+          <>
+            <form>
+              <Box display="grid" gridGap={3}>
+                <label>
+                  Price per share (PPS)
+                  <div style={{ display: 'flex', fontWeight: 'normal' }}>
+                    <span
+                      style={{ alignSelf: 'center', marginRight: '0.5rem' }}
+                    >
+                      {modelParameters.currencySymbol}
+                    </span>
+                    <Input
+                      type="text"
+                      pattern="^\d*(\.\d{0,2})?$"
+                      value={modelParameters.pricePerShare}
+                      onChange={(e) =>
+                        setModelParameters({
+                          ...modelParameters,
+                          pricePerShare: parseFloat(e.target.value),
+                        })
+                      }
+                    />
+                  </div>
+                </label>
+                <label>
+                  Earnings per share (EPS)
+                  <Input
+                    type="text"
+                    pattern="^\d*(\.\d{0,2})?$"
+                    value={modelParameters.earningsPerShare}
+                    onChange={(e) =>
+                      setModelParameters({
+                        ...modelParameters,
+                        earningsPerShare: parseFloat(e.target.value),
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  Growth rate (GR)
+                  <Input
+                    type="text"
+                    pattern="^\d*(\.\d{0,2})?$"
+                    value={modelParameters.growthRate}
+                    onChange={(e) =>
+                      setModelParameters({
+                        ...modelParameters,
+                        growthRate: parseFloat(e.target.value),
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  Yield of bond (YB)
+                  <Input
+                    type="text"
+                    pattern="^\d*(\.\d{0,2})?$"
+                    value={modelParameters.currentYieldOfBond}
+                    onChange={(e) =>
+                      setModelParameters({
+                        ...modelParameters,
+                        currentYieldOfBond: parseFloat(e.target.value),
+                      })
+                    }
+                  />
+                </label>
+              </Box>
+            </form>
+          </>
+        )}
       </Box>
+
       <Box display="flex" flexDir="column" gap={4}>
         <Button type="button" colorScheme="blue" onClick={clearValues}>
           Clear
