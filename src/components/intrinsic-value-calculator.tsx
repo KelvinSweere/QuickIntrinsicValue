@@ -59,6 +59,8 @@ const IntrinsicValueCalculator = () => {
 
   const calculateValues = () => {
     getYahooFinanceData();
+    console.log('modelParameters', modelParameters);
+
     setIntrinsicValue(
       calculateIntrinsicValue(
         Number(modelParameters.pricePerShare),
