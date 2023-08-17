@@ -11,6 +11,7 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -46,6 +47,7 @@ const defaultModelParameters: IModelParameters = {
 const IntrinsicValueCalculator = () => {
   const [stockSymbol, setStockSymbol] = useState<string>('');
   const [marginOfSafety, setMarginOfSafety] = useState<string>('65');
+  const toast = useToast();
 
   const [modelParameters, setModelParameters] = useState<IModelParameters>(
     defaultModelParameters
@@ -87,6 +89,29 @@ const IntrinsicValueCalculator = () => {
     setIntrinsicValue(defaultIntrinsicValue);
   };
 
+  const tryToSetMarginOfSafety = (value: string) => {
+    const numericMarginValue = Number(value);
+    if (numericMarginValue > 0 && numericMarginValue <= 70) {
+      setMarginOfSafety(value);
+    } else if (numericMarginValue > 70) {
+      toast({
+        title: 'Margin of safety too high',
+        description: 'Margin of safety must be lower than 70%',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+    } else if (numericMarginValue <= 0) {
+      toast({
+        title: 'Margin of safety too low',
+        description: 'Margin of safety must be higher than 0%',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+  };
+
   async function getYahooFinanceData() {
     setIsLoading(true);
     try {
@@ -125,6 +150,17 @@ const IntrinsicValueCalculator = () => {
             </Button>
           </div>
         </label>
+        <label>
+          Margin of safety (%)
+          <div style={{ display: 'flex' }}>
+            <Input
+              type="number"
+              pattern="^\d*(\.\d{0,2})?$"
+              value={marginOfSafety}
+              onChange={(e) => tryToSetMarginOfSafety(e.target.value)}
+            />
+          </div>
+        </label>
       </Box>
 
       <Box bg="white" p={4} rounded="md" fontWeight="bold">
@@ -145,59 +181,53 @@ const IntrinsicValueCalculator = () => {
                       {modelParameters.currencySymbol}
                     </span>
                     <Input
+                      readOnly
                       type="text"
                       pattern="^\d*(\.\d{0,2})?$"
                       value={modelParameters.pricePerShare}
-                      onChange={(e) =>
-                        setModelParameters({
-                          ...modelParameters,
-                          pricePerShare: parseFloat(e.target.value),
-                        })
-                      }
                     />
                   </div>
                 </label>
                 <label>
                   Earnings per share (EPS)
                   <Input
+                    readOnly
                     type="text"
                     pattern="^\d*(\.\d{0,2})?$"
                     value={modelParameters.earningsPerShare}
-                    onChange={(e) =>
-                      setModelParameters({
-                        ...modelParameters,
-                        earningsPerShare: parseFloat(e.target.value),
-                      })
-                    }
                   />
                 </label>
                 <label>
-                  Growth rate (GR)
-                  <Input
-                    type="text"
-                    pattern="^\d*(\.\d{0,2})?$"
-                    value={modelParameters.growthRate}
-                    onChange={(e) =>
-                      setModelParameters({
-                        ...modelParameters,
-                        growthRate: parseFloat(e.target.value),
-                      })
-                    }
-                  />
+                  Growth rate avg. 5 years (GR)
+                  <div style={{ display: 'flex', fontWeight: 'normal' }}>
+                    <span
+                      style={{ alignSelf: 'center', marginRight: '0.5rem' }}
+                    >
+                      %
+                    </span>
+                    <Input
+                      readOnly
+                      type="text"
+                      pattern="^\d*(\.\d{0,2})?$"
+                      value={modelParameters.growthRate}
+                    />
+                  </div>
                 </label>
                 <label>
-                  Yield of bond (YB)
-                  <Input
-                    type="text"
-                    pattern="^\d*(\.\d{0,2})?$"
-                    value={modelParameters.currentYieldOfBond}
-                    onChange={(e) =>
-                      setModelParameters({
-                        ...modelParameters,
-                        currentYieldOfBond: parseFloat(e.target.value),
-                      })
-                    }
-                  />
+                  Yield of AAA bond (YB)
+                  <div style={{ display: 'flex', fontWeight: 'normal' }}>
+                    <span
+                      style={{ alignSelf: 'center', marginRight: '0.5rem' }}
+                    >
+                      %
+                    </span>
+                    <Input
+                      readOnly
+                      type="text"
+                      pattern="^\d*(\.\d{0,2})?$"
+                      value={modelParameters.currentYieldOfBond}
+                    />
+                  </div>
                 </label>
               </Box>
             </form>
