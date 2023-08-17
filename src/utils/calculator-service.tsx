@@ -1,10 +1,3 @@
-export interface ICalculatedModel {
-  intristicValue: number;
-  differencePercentage: number;
-  acceptableBuyPrice: number;
-  canBuy: boolean;
-}
-
 export function calculateIntrinsicValue(
   pricePerShare: number,
   earningsPerShare: number,

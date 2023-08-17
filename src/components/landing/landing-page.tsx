@@ -1,4 +1,4 @@
-import IntrinsicValueCalculator from '../intrinsic-value-calculator';
+import IntrinsicValueCalculator from '../calculator/intrinsic-value-calculator';
 
 const LandingPage = () => {
   return (
