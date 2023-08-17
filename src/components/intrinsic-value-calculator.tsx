@@ -13,7 +13,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   ICalculatedModel,
@@ -57,10 +57,19 @@ const IntrinsicValueCalculator = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const calculateValues = () => {
-    getYahooFinanceData();
+  useEffect(() => {
     console.log('modelParameters', modelParameters);
+  }, [modelParameters]);
 
+  useEffect(() => {
+    console.log('intrinsicValue', intrinsicValue);
+  }, [intrinsicValue]);
+
+  const calculateValues = async () => {
+    await getYahooFinanceData();
+  };
+
+  useEffect(() => {
     setIntrinsicValue(
       calculateIntrinsicValue(
         Number(modelParameters.pricePerShare),
@@ -70,7 +79,7 @@ const IntrinsicValueCalculator = () => {
         Number(marginOfSafety)
       )
     );
-  };
+  }, [modelParameters]);
 
   const clearValues = () => {
     setStockSymbol('');
@@ -80,8 +89,6 @@ const IntrinsicValueCalculator = () => {
 
   async function getYahooFinanceData() {
     setIsLoading(true);
-    setModelParameters(defaultModelParameters);
-    setIntrinsicValue(defaultIntrinsicValue);
     try {
       const response = await axios.get(
         `/api/get-data?stockSymbol=${stockSymbol}`
@@ -210,7 +217,6 @@ const IntrinsicValueCalculator = () => {
             <Tr>
               <Th textAlign="center">Stock price</Th>
               <Th textAlign="center">Intrinsic Value</Th>
-              {/* <Th textAlign="center">Difference</Th> */}
               <Th textAlign="center">Acceptable Buy Price</Th>
               <Th textAlign="center">Should Buy</Th>
             </Tr>
@@ -223,9 +229,6 @@ const IntrinsicValueCalculator = () => {
               <Td textAlign="center" bg="white">
                 {intrinsicValue.intristicValue}
               </Td>
-              {/* <Td textAlign="center" bg="white">
-                {intrinsicValue.differencePercentage} %
-              </Td> */}
               <Td textAlign="center" bg="white">
                 {intrinsicValue.acceptableBuyPrice}
               </Td>
