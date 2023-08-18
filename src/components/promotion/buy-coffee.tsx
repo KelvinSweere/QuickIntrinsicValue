@@ -4,7 +4,7 @@ const BuyCoffee = () => {
   return (
     <Box
       as="a"
-      href="https://github.com/KelvinSweere/Quick_Intrinsic_Value"
+      href="https://www.buymeacoffee.com/KelvinSweere"
       target="_blank"
       className="github-corner"
       aria-label="Buy me a coffee"
