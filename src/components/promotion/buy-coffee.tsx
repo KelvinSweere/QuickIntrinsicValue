@@ -1,10 +1,4 @@
-import {
-  Box,
-  Circle,
-  Image,
-  keyframes,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+import { Box, Circle, Image, keyframes, useMediaQuery } from '@chakra-ui/react';
 
 const buzz = keyframes`
   0%, 100% {
@@ -19,7 +13,8 @@ const buzz = keyframes`
 `;
 
 const BuyCoffee = () => {
-  const isVisible = useBreakpointValue({ base: false, md: true });
+  const [isVisible] = useMediaQuery('(min-width: 55rem)');
+
   return (
     <>
       {isVisible && (

@@ -1,5 +1,6 @@
 import { IModelParameters } from '@/types/model-parameters';
-import { Box, Input, Spinner } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
+import ReadonlyInput from './readonly-input';
 
 interface ICalculatorParametersProps {
   isLoading: boolean;
@@ -20,57 +21,25 @@ const CalculatorParameters = ({
         <>
           <form>
             <Box display="grid" gridGap={3}>
-              <label>
-                Price per share (PPS)
-                <div style={{ display: 'flex', fontWeight: 'normal' }}>
-                  <span style={{ alignSelf: 'center', marginRight: '0.5rem' }}>
-                    {modelParameters.currencySymbol}
-                  </span>
-                  <Input
-                    readOnly
-                    type="text"
-                    pattern="^\d*(\.\d{0,2})?$"
-                    value={modelParameters.pricePerShare}
-                  />
-                </div>
-              </label>
-              <label>
-                Earnings per share (EPS)
-                <Input
-                  readOnly
-                  type="text"
-                  pattern="^\d*(\.\d{0,2})?$"
-                  value={modelParameters.earningsPerShare}
-                />
-              </label>
-              <label>
-                Growth rate avg. 5 years (GR)
-                <div style={{ display: 'flex', fontWeight: 'normal' }}>
-                  <span style={{ alignSelf: 'center', marginRight: '0.5rem' }}>
-                    %
-                  </span>
-                  <Input
-                    readOnly
-                    type="text"
-                    pattern="^\d*(\.\d{0,2})?$"
-                    value={modelParameters.growthRate}
-                  />
-                </div>
-              </label>
-              <label>
-                Yield of AAA bond (YB)
-                <div style={{ display: 'flex', fontWeight: 'normal' }}>
-                  <span style={{ alignSelf: 'center', marginRight: '0.5rem' }}>
-                    %
-                  </span>
-                  <Input
-                    readOnly
-                    type="text"
-                    pattern="^\d*(\.\d{0,2})?$"
-                    value={modelParameters.currentYieldOfBond}
-                  />
-                </div>
-              </label>
+              <ReadonlyInput
+                heading="Price per share (PPS)"
+                symbol={modelParameters.currencySymbol}
+                value={modelParameters.pricePerShare}
+              />
+              <ReadonlyInput
+                heading="Earnings per share (EPS)"
+                value={modelParameters.earningsPerShare}
+              />
+              <ReadonlyInput
+                heading="Growth rate avg. 5 years (GR)"
+                symbol="%"
+                value={modelParameters.growthRate}
+              />
+              <ReadonlyInput
+                heading="Yield of AAA bond (YB)"
+                symbol="%"
+                value={modelParameters.currentYieldOfBond}
+              />
             </Box>
           </form>
         </>
