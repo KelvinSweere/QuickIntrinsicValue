@@ -28,7 +28,9 @@ export function calculateIntrinsicValue(
       ? calculatedAcceptableBuyPrice
       : '0.00';
 
-  const canBuy = pricePerShare <= parseFloat(acceptableBuyPrice);
+  const canBuy =
+    pricePerShare <= parseFloat(acceptableBuyPrice) && pricePerShare !== 0;
+
   return {
     intrinsicValue: parseFloat(value),
     differencePercentage: parseFloat(differencePercentage),
