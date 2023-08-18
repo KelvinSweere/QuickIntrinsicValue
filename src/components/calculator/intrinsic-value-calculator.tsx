@@ -57,7 +57,14 @@ const IntrinsicValueCalculator = () => {
   );
 
   return (
-    <Container display="flex" flexDir="column" w="100vw" p={4} gap="1rem">
+    <Container
+      display="flex"
+      flexDir="column"
+      w="100vw"
+      p={4}
+      gap="1rem"
+      minW="50vw"
+    >
       <Box textAlign="center">
         <Heading fontSize="4xl" fontWeight="bold" mb={4}>
           <GradientText>Graham Formula Calculator</GradientText>
