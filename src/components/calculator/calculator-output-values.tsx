@@ -1,6 +1,8 @@
 import { ICalculatedModel } from '@/types/calculated-model';
 import { IModelParameters } from '@/types/model-parameters';
-import { Box, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { useBreakpointValue } from '@chakra-ui/react';
+import CalculatorOutputMobile from './output/calculator-output-mobile';
+import CalculatorOutputRegular from './output/calculator-output-regular';
 
 interface ICalculatorOutputValuesProps {
   modelParameters: IModelParameters;
@@ -11,40 +13,22 @@ const CalculatorOutputValues = ({
   modelParameters,
   intrinsicValue,
 }: ICalculatorOutputValuesProps) => {
+  const mobileView = useBreakpointValue({ base: true, sm: false });
+
   return (
-    <Box mt={4} bg="white">
-      <Table variant="simple" colorScheme="red">
-        <Thead>
-          <Tr>
-            <Th textAlign="center">Stock price</Th>
-            <Th textAlign="center">Intrinsic Value</Th>
-            <Th textAlign="center">Acceptable Buy Price</Th>
-            <Th textAlign="center">Should Buy</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          <Tr>
-            <Td textAlign="center" bg="white">
-              {modelParameters.pricePerShare}
-            </Td>
-            <Td textAlign="center" bg="white">
-              {intrinsicValue.intrinsicValue}
-            </Td>
-            <Td textAlign="center" bg="white">
-              {intrinsicValue.acceptableBuyPrice}
-            </Td>
-            <Td
-              textAlign="center"
-              bg="white"
-              fontWeight="bold"
-              color={intrinsicValue.canBuy ? 'green.500' : 'red.500'}
-            >
-              {intrinsicValue.canBuy ? 'Yes' : 'No'}
-            </Td>
-          </Tr>
-        </Tbody>
-      </Table>
-    </Box>
+    <>
+      {mobileView ? (
+        <CalculatorOutputMobile
+          modelParameters={modelParameters}
+          intrinsicValue={intrinsicValue}
+        />
+      ) : (
+        <CalculatorOutputRegular
+          modelParameters={modelParameters}
+          intrinsicValue={intrinsicValue}
+        />
+      )}
+    </>
   );
 };
 

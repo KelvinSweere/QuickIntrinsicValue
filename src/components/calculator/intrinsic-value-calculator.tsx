@@ -6,7 +6,14 @@ import {
   IModelParameters,
   defaultModelParameters,
 } from '@/types/model-parameters';
-import { Box, Button, Container, Heading, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { calculateIntrinsicValue } from '../../utils/calculator-service';
 import CalculatorInputForm from './calculator-input-form';
@@ -23,6 +30,13 @@ const IntrinsicValueCalculator = () => {
     defaultIntrinsicValue
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const calculatorWidth = useBreakpointValue({
+    base: '95vw',
+    md: '75vw',
+    lg: '65vw',
+    xl: '40vw',
+  });
 
   useEffect(() => {
     setIntrinsicValue(
@@ -50,7 +64,7 @@ const IntrinsicValueCalculator = () => {
       fontWeight="bold"
       bgGradient="linear(to-l, red.300, red.500)"
       bgClip="text"
-      whiteSpace="nowrap"
+      fontSize={{ base: '3xl', md: '4xl' }}
     >
       {children}
     </Box>
@@ -63,7 +77,7 @@ const IntrinsicValueCalculator = () => {
       w="100vw"
       p={4}
       gap="1rem"
-      minW="50vw"
+      maxW={calculatorWidth}
     >
       <Box textAlign="center">
         <Heading fontSize="4xl" fontWeight="bold" mb={4}>
