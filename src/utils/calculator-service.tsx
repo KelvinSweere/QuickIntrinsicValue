@@ -20,7 +20,7 @@ export function calculateIntrinsicValue(
   ).toFixed(2);
   const calculatedAcceptableBuyPrice = (
     parseFloat(value) *
-    (marginOfSafety / 100)
+    ((100 - marginOfSafety) / 100)
   ).toFixed(2);
 
   const acceptableBuyPrice =

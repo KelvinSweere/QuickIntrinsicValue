@@ -25,30 +25,29 @@ const CalculatorInputForm = ({
     await getYahooFinanceData();
   };
 
-  const tryToSetMarginOfSafety = (value: string) => {
-    const numericMarginValue = Number(value);
-    if (numericMarginValue > 70) {
+  const checkIfMarginOfSafetyIsValid = () => {
+    const numericMarginValue = Number(marginOfSafety);
+    if (numericMarginValue < 35) {
       toast({
         title: 'Margin of safety too high',
-        description: 'Margin of safety must be lower than 70%',
+        description: 'Margin of safety must be higher than 35%',
         status: 'error',
         duration: 2000,
         isClosable: true,
       });
-      setMarginOfSafety('70');
+      setMarginOfSafety('35');
       return;
-    } else if (numericMarginValue < 0) {
+    } else if (numericMarginValue > 100) {
       toast({
-        title: 'Margin of safety too low',
-        description: 'Margin of safety must be higher than 0%',
+        title: 'Margin of safety too high',
+        description: "Margin of safety can't be higher than 100%",
         status: 'error',
         duration: 2000,
         isClosable: true,
       });
-      setMarginOfSafety('0');
+      setMarginOfSafety('100');
       return;
     }
-    setMarginOfSafety(value);
   };
 
   async function getYahooFinanceData() {
@@ -94,13 +93,14 @@ const CalculatorInputForm = ({
         </div>
       </label>
       <label>
-        Margin of safety (%)
+        Margin of safety / discount (%)
         <div style={{ display: 'flex' }}>
           <Input
             type="number"
             pattern="^\d*(\.\d{0,2})?$"
             value={marginOfSafety}
-            onChange={(e) => tryToSetMarginOfSafety(e.target.value)}
+            onChange={(e) => setMarginOfSafety(e.target.value)}
+            onBlur={checkIfMarginOfSafetyIsValid}
           />
         </div>
       </label>
