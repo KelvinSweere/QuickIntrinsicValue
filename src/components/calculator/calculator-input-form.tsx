@@ -87,6 +87,7 @@ const CalculatorInputForm = ({
             ml={4}
             onClick={calculateValues}
             _hover={{ bg: 'red.500', color: 'white' }}
+            px="2rem"
           >
             Calculate
           </Button>
