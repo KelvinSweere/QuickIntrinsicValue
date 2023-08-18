@@ -15,7 +15,7 @@ import CalculatorParameters from './calculator-parameters';
 
 const IntrinsicValueCalculator = () => {
   const [stockSymbol, setStockSymbol] = useState<string>('');
-  const [marginOfSafety, setMarginOfSafety] = useState<string>('65');
+  const [marginOfSafety, setMarginOfSafety] = useState<string>('35');
   const [modelParameters, setModelParameters] = useState<IModelParameters>(
     defaultModelParameters
   );
