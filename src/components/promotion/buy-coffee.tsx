@@ -1,4 +1,16 @@
-import { Box, Circle, Image } from '@chakra-ui/react';
+import { Box, Circle, Image, keyframes } from '@chakra-ui/react';
+
+const buzz = keyframes`
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-10deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+`;
 
 const BuyCoffee = () => {
   return (
@@ -13,6 +25,11 @@ const BuyCoffee = () => {
       left="2rem"
       zIndex="9999"
       border="0"
+      _hover={{
+        '.coffee-icon': {
+          animation: `${buzz} 560ms ease-in-out`,
+        },
+      }}
     >
       <Circle
         bgColor="white"
@@ -22,7 +39,11 @@ const BuyCoffee = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Image src="svg/buy-me-a-coffee.svg" alt="Buy Me a Coffee" />
+        <Image
+          className="coffee-icon"
+          src="svg/buy-me-a-coffee.svg"
+          alt="Buy Me a Coffee"
+        />
       </Circle>
     </Box>
   );
