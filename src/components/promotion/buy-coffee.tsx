@@ -1,4 +1,10 @@
-import { Box, Circle, Image, keyframes } from '@chakra-ui/react';
+import {
+  Box,
+  Circle,
+  Image,
+  keyframes,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 
 const buzz = keyframes`
   0%, 100% {
@@ -13,39 +19,44 @@ const buzz = keyframes`
 `;
 
 const BuyCoffee = () => {
+  const isVisible = useBreakpointValue({ base: false, md: true });
   return (
-    <Box
-      as="a"
-      href="https://www.buymeacoffee.com/KelvinSweere"
-      target="_blank"
-      className="github-corner"
-      aria-label="Buy me a coffee"
-      position="fixed"
-      bottom="2rem"
-      left="2rem"
-      zIndex="9999"
-      border="0"
-      _hover={{
-        '.coffee-icon': {
-          animation: `${buzz} 560ms ease-in-out`,
-        },
-      }}
-    >
-      <Circle
-        bgColor="white"
-        minW="5rem"
-        minH="5rem"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Image
-          className="coffee-icon"
-          src="svg/buy-me-a-coffee.svg"
-          alt="Buy Me a Coffee"
-        />
-      </Circle>
-    </Box>
+    <>
+      {isVisible && (
+        <Box
+          as="a"
+          href="https://www.buymeacoffee.com/KelvinSweere"
+          target="_blank"
+          className="github-corner"
+          aria-label="Buy me a coffee"
+          position="fixed"
+          bottom="2rem"
+          left="2rem"
+          zIndex="9999"
+          border="0"
+          _hover={{
+            '.coffee-icon': {
+              animation: `${buzz} 560ms ease-in-out`,
+            },
+          }}
+        >
+          <Circle
+            bgColor="white"
+            minW="5rem"
+            minH="5rem"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Image
+              className="coffee-icon"
+              src="svg/buy-me-a-coffee.svg"
+              alt="Buy Me a Coffee"
+            />
+          </Circle>
+        </Box>
+      )}
+    </>
   );
 };
 
