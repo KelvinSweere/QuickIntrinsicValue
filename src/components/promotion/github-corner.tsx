@@ -16,7 +16,8 @@ const GithubCorner = () => {
   return (
     <Box
       as="a"
-      href="https://your-url"
+      href="https://github.com/KelvinSweere/Quick_Intrinsic_Value"
+      target="_blank"
       className="github-corner"
       aria-label="View source on GitHub"
       position="absolute"
