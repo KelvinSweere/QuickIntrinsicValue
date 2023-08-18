@@ -1,4 +1,4 @@
-import { Input, Text } from '@chakra-ui/react';
+import { Box, Flex, Input, Text } from '@chakra-ui/react';
 
 interface IReadonlyInputProps {
   heading: string;
@@ -8,17 +8,17 @@ interface IReadonlyInputProps {
 
 const ReadonlyInput = ({ heading, symbol, value }: IReadonlyInputProps) => {
   return (
-    <label>
+    <Box>
       <Text fontWeight="bold">{heading}</Text>
-      <div style={{ display: 'flex', fontWeight: 'normal' }}>
+      <Flex alignItems="center">
         {symbol && (
-          <span style={{ alignSelf: 'center', marginRight: '0.5rem' }}>
+          <Text alignSelf="center" marginRight="0.5rem">
             {symbol}
-          </span>
+          </Text>
         )}
-        <Input readOnly type="text" value={value} />
-      </div>
-    </label>
+        <Input isReadOnly value={value.toString()} />
+      </Flex>
+    </Box>
   );
 };
 
