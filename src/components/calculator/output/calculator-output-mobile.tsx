@@ -39,6 +39,13 @@ const CalculatorOutputMobile = ({
         symbol={modelParameters.currencySymbol}
         value={intrinsicValue.acceptableBuyPrice}
       />
+
+      <ReadonlyInput
+        heading="Peter Lynch Valuation: "
+        value={intrinsicValue.plValutation}
+        tooltipText="<1 overvalued, <1.5 fairly valued, >2 undervalued"
+      />
+
       <Flex flexDir="row">
         <Text fontWeight="bold" mb={2} display="flex" alignItems="center">
           Should Buy:{' '}
