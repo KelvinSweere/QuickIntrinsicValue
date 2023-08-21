@@ -1,5 +1,6 @@
 import { ICalculatedModel } from '@/types/calculated-model';
 import { IModelParameters } from '@/types/model-parameters';
+import { shouldBuy } from '@/utils/calculator-service';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import ReadonlyInput from '../readonly-input';
 
@@ -44,10 +45,22 @@ const CalculatorOutputMobile = ({
         </Text>
         <Text
           fontWeight="bold"
-          color={intrinsicValue.canBuy ? 'green.500' : 'red.500'}
+          color={
+            shouldBuy(
+              intrinsicValue.belowIntrinsicValue,
+              intrinsicValue.plValutation
+            )
+              ? 'green.500'
+              : 'red.500'
+          }
           mx="auto"
         >
-          {intrinsicValue.canBuy ? 'Yes' : 'No'}
+          {shouldBuy(
+            intrinsicValue.belowIntrinsicValue,
+            intrinsicValue.plValutation
+          )
+            ? 'Yes'
+            : 'No'}
         </Text>
       </Flex>
     </Box>

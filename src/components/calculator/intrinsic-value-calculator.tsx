@@ -45,7 +45,9 @@ const IntrinsicValueCalculator = () => {
         Number(modelParameters.earningsPerShare),
         Number(modelParameters.growthRate),
         Number(modelParameters.currentYieldOfBond),
-        Number(marginOfSafety)
+        Number(marginOfSafety),
+        Number(modelParameters.dividendYield),
+        Number(modelParameters.peRation)
       )
     );
   }, [modelParameters]);
@@ -81,12 +83,12 @@ const IntrinsicValueCalculator = () => {
     >
       <Box textAlign="center">
         <Heading fontSize="4xl" fontWeight="bold" mb={4}>
-          <GradientText>Graham Formula Calculator</GradientText>
+          <GradientText>Quick Intrinsic Value Calculator</GradientText>
         </Heading>
         <Text fontSize="xl" color="gray.600">
-          Unlock the potential of stock valuation with our Graham Formula
-          Calculator. Effortlessly compute the intrinsic value of stocks by
-          simply entering the Yahoo Finance stock symbol.
+          Unlock the potential of stock valuation with our Graham Formula &
+          Peter Lynch Valuation Calculator. Effortlessly compute the intrinsic
+          value of stocks by simply entering the Yahoo Finance stock symbol.
         </Text>
       </Box>
 

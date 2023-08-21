@@ -5,7 +5,12 @@ export default async (req, res) => {
 
   try {
     const result = await yahooFinance.quoteSummary(stockSymbol, {
-      modules: ['price', 'defaultKeyStatistics', 'earningsTrend'],
+      modules: [
+        'price',
+        'defaultKeyStatistics',
+        'earningsTrend',
+        'summaryDetail',
+      ],
     });
     const pricePerShare = result.price.regularMarketPrice;
     const earningsPerShare = result.defaultKeyStatistics.trailingEps;
@@ -14,6 +19,10 @@ export default async (req, res) => {
     )?.growth;
     const currentYieldOfBond = 2.57;
     const currencySymbol = result.price.currencySymbol;
+    const dividendYield = result.summaryDetail.dividendYield ?? 0;
+    const peRation = result.summaryDetail.trailingPE;
+
+    const isInvalid = growthRate === null || peRation === null;
 
     return res.status(200).json({
       pricePerShare,
@@ -21,6 +30,9 @@ export default async (req, res) => {
       growthRate: (growthRate * 100).toFixed(2),
       currentYieldOfBond,
       currencySymbol,
+      dividendYield: (dividendYield * 100).toFixed(2),
+      peRation,
+      isInvalid,
     });
   } catch (error) {
     return res

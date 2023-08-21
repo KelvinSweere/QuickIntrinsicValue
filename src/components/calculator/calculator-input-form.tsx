@@ -1,4 +1,7 @@
-import { IModelParameters } from '@/types/model-parameters';
+import {
+  IModelParameters,
+  defaultModelParameters,
+} from '@/types/model-parameters';
 import { Box, Button, Input, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 
@@ -56,21 +59,44 @@ const CalculatorInputForm = ({
     }
 
     setIsLoading(true);
+
     try {
       const response = await axios.get(
         `/api/get-data?stockSymbol=${stockSymbol}`
       );
-      setModelParameters(response.data);
+      const { data } = response;
+
+      if (data.isInvalid) {
+        handleInvalidData();
+        setModelParameters(defaultModelParameters);
+      } else {
+        setModelParameters(data);
+      }
     } catch (error) {
-      toast({
-        title: `Ticker '${stockSymbol}' not found`,
-        description: 'Please enter a valid yahoo finance ticker',
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-      });
+      handleNotFoundError();
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  }
+
+  function handleInvalidData() {
+    toast({
+      title: `Ticker '${stockSymbol}' data is invalid`,
+      description: "Can't calculate the intrinsic value of this stock",
+      status: 'error',
+      duration: 2000,
+      isClosable: true,
+    });
+  }
+
+  function handleNotFoundError() {
+    toast({
+      title: `Ticker '${stockSymbol}' not found`,
+      description: 'Please enter a valid yahoo finance ticker',
+      status: 'error',
+      duration: 2000,
+      isClosable: true,
+    });
   }
 
   return (
