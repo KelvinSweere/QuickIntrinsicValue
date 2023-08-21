@@ -1,15 +1,30 @@
-import { Box, Flex, Input, Text } from '@chakra-ui/react';
+import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { Box, Flex, Input, Text, Tooltip } from '@chakra-ui/react';
 
 interface IReadonlyInputProps {
   heading: string;
   symbol?: string;
   value: string | number;
+  tooltipText?: string;
 }
 
-const ReadonlyInput = ({ heading, symbol, value }: IReadonlyInputProps) => {
+const ReadonlyInput = ({
+  heading,
+  symbol,
+  value,
+  tooltipText,
+}: IReadonlyInputProps) => {
   return (
     <Box>
-      <Text fontWeight="bold">{heading}</Text>
+      <Text fontWeight="bold">
+        {heading}
+        {tooltipText && (
+          <Tooltip label={tooltipText}>
+            <InfoOutlineIcon ml="1" w={3} h={4} color="gray.500" />
+          </Tooltip>
+        )}
+      </Text>
+
       <Flex alignItems="center">
         {symbol && (
           <Text alignSelf="center" marginRight="0.5rem">
