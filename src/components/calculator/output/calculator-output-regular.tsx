@@ -1,7 +1,17 @@
 import { ICalculatedModel } from '@/types/calculated-model';
 import { IModelParameters } from '@/types/model-parameters';
 import { shouldBuy } from '@/utils/calculator-service';
-import { Box, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { InfoOutlineIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tooltip,
+  Tr,
+} from '@chakra-ui/react';
 
 interface ICalculatorOutputRegularProps {
   modelParameters: IModelParameters;
@@ -16,8 +26,10 @@ const CalculatorOutputRegular = ({
     const plValutation: number = intrinsicValue.plValutation;
     if (plValutation < 1) {
       return 'red.500';
-    } else if (plValutation < 2) {
+    } else if (plValutation < 1.5) {
       return 'yellow.500';
+    } else if (plValutation < 2) {
+      return 'green.300';
     } else {
       return 'green.500';
     }
@@ -31,7 +43,12 @@ const CalculatorOutputRegular = ({
             <Th textAlign="center">Stock price</Th>
             <Th textAlign="center">Intrinsic Value</Th>
             <Th textAlign="center">Acceptable Buy Price</Th>
-            <Th textAlign="center">Peter Lynch Valuation</Th>
+            <Th textAlign="center">
+              Peter Lynch Valuation{' '}
+              <Tooltip label="&lt;1 overvalued, &lt;1.5 fairly valued, &gt;2 undervalued">
+                <InfoOutlineIcon ml="1" w={3} h={4} color="gray.500" />
+              </Tooltip>
+            </Th>
             <Th textAlign="center">Should Buy</Th>
           </Tr>
         </Thead>
