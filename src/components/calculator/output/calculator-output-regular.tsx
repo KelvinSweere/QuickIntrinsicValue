@@ -1,5 +1,6 @@
 import { ICalculatedModel } from '@/types/calculated-model';
 import { IModelParameters } from '@/types/model-parameters';
+import { shouldBuy } from '@/utils/calculator-service';
 import { Box, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 
 interface ICalculatorOutputRegularProps {
@@ -11,6 +12,17 @@ const CalculatorOutputRegular = ({
   modelParameters,
   intrinsicValue,
 }: ICalculatorOutputRegularProps) => {
+  const getPlValutationColor = (): string => {
+    const plValutation: number = intrinsicValue.plValutation;
+    if (plValutation < 1) {
+      return 'red.500';
+    } else if (plValutation < 2) {
+      return 'yellow.500';
+    } else {
+      return 'green.500';
+    }
+  };
+
   return (
     <Box mt={4} bg="white">
       <Table variant="simple" colorScheme="red">
@@ -19,6 +31,7 @@ const CalculatorOutputRegular = ({
             <Th textAlign="center">Stock price</Th>
             <Th textAlign="center">Intrinsic Value</Th>
             <Th textAlign="center">Acceptable Buy Price</Th>
+            <Th textAlign="center">Peter Lynch Valuation</Th>
             <Th textAlign="center">Should Buy</Th>
           </Tr>
         </Thead>
@@ -30,16 +43,41 @@ const CalculatorOutputRegular = ({
             <Td textAlign="center" bg="white">
               {intrinsicValue.intrinsicValue}
             </Td>
-            <Td textAlign="center" bg="white">
+            <Td
+              textAlign="center"
+              bg="white"
+              textColor={
+                intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'
+              }
+            >
               {intrinsicValue.acceptableBuyPrice}
             </Td>
             <Td
               textAlign="center"
               bg="white"
-              fontWeight="bold"
-              color={intrinsicValue.canBuy ? 'green.500' : 'red.500'}
+              textColor={getPlValutationColor()}
             >
-              {intrinsicValue.canBuy ? 'Yes' : 'No'}
+              {intrinsicValue.plValutation}
+            </Td>
+            <Td
+              textAlign="center"
+              bg="white"
+              fontWeight="bold"
+              color={
+                shouldBuy(
+                  intrinsicValue.belowIntrinsicValue,
+                  intrinsicValue.plValutation
+                )
+                  ? 'green.500'
+                  : 'red.500'
+              }
+            >
+              {shouldBuy(
+                intrinsicValue.belowIntrinsicValue,
+                intrinsicValue.plValutation
+              )
+                ? 'Yes'
+                : 'No'}
             </Td>
           </Tr>
         </Tbody>

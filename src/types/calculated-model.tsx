@@ -2,12 +2,14 @@ export interface ICalculatedModel {
   intrinsicValue: number;
   differencePercentage: number;
   acceptableBuyPrice: number;
-  canBuy: boolean;
+  belowIntrinsicValue: boolean;
+  plValutation: number;
 }
 
 export const defaultIntrinsicValue: ICalculatedModel = {
   intrinsicValue: 0,
   differencePercentage: 0,
   acceptableBuyPrice: 0,
-  canBuy: false,
+  belowIntrinsicValue: false,
+  plValutation: 0,
 };

@@ -4,6 +4,9 @@ export interface IModelParameters {
   growthRate: number;
   currentYieldOfBond: number;
   currencySymbol: string;
+  dividendYield: number;
+  peRation: number;
+  isInvalid: boolean;
 }
 
 export const defaultModelParameters: IModelParameters = {
@@ -12,4 +15,7 @@ export const defaultModelParameters: IModelParameters = {
   growthRate: 0,
   currentYieldOfBond: 0,
   currencySymbol: '$',
+  dividendYield: 0,
+  peRation: 0,
+  isInvalid: false,
 };

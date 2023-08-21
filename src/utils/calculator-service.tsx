@@ -5,7 +5,9 @@ export function calculateIntrinsicValue(
   earningsPerShare: number,
   growthRate: number,
   currentYieldOfBond: number,
-  marginOfSafety: number
+  marginOfSafety: number,
+  dividendYield: number,
+  peRatio: number
 ): ICalculatedModel {
   const calculateValue = (
     earningsPerShare *
@@ -28,13 +30,22 @@ export function calculateIntrinsicValue(
       ? calculatedAcceptableBuyPrice
       : '0.00';
 
-  const canBuy =
+  const belowIntrinsicValue =
     pricePerShare <= parseFloat(acceptableBuyPrice) && pricePerShare !== 0;
+
+  const plValutation = ((earningsPerShare + dividendYield) / peRatio).toFixed(
+    2
+  );
 
   return {
     intrinsicValue: parseFloat(value),
     differencePercentage: parseFloat(differencePercentage),
     acceptableBuyPrice: parseFloat(acceptableBuyPrice),
-    canBuy,
+    belowIntrinsicValue,
+    plValutation: parseFloat(plValutation),
   };
+}
+
+export function shouldBuy(belowIntrinsicValue: boolean, plValutation: number) {
+  return belowIntrinsicValue && plValutation >= 1;
 }
