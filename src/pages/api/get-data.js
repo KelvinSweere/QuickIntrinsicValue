@@ -10,19 +10,52 @@ export default async (req, res) => {
         'defaultKeyStatistics',
         'earningsTrend',
         'summaryDetail',
+        'financialData',
+        'cashflowStatementHistory',
+        'balanceSheetHistory',
       ],
     });
-    const pricePerShare = result.price.regularMarketPrice;
-    const earningsPerShare = result.defaultKeyStatistics.trailingEps;
+
+    const freeCashFlow =
+      result?.cashflowStatementHistory?.cashflowStatements?.[0]
+        .totalCashFromOperatingActivities +
+      result?.cashflowStatementHistory?.cashflowStatements?.[0]
+        .capitalExpenditures;
+
+    const cash =
+      result?.balanceSheetHistory?.balanceSheetStatements?.[0].cash +
+      result?.balanceSheetHistory?.balanceSheetStatements?.[0]
+        .shortTermInvestments;
+
+    const debt =
+      result?.balanceSheetHistory?.balanceSheetStatements?.[0].longTermDebt +
+      result?.balanceSheetHistory?.balanceSheetStatements?.[0]
+        .shortLongTermDebt;
+
+    const sharesOutstanding = result?.defaultKeyStatistics?.sharesOutstanding;
+
     const growthRate = result.earningsTrend.trend?.find(
       (x) => x.period === '+5y'
     )?.growth;
+    const pricePerShare = result.price.regularMarketPrice;
+    const earningsPerShare = result.defaultKeyStatistics.trailingEps;
     const currentYieldOfBond = 2.57;
     const currencySymbol = result.price.currencySymbol;
     const dividendYield = result.summaryDetail.dividendYield ?? 0;
     const peRation = result.summaryDetail.trailingPE;
+    const perpetualGrowthRate = 3;
 
     const isInvalid = growthRate === null || peRation === null;
+
+    const equity = result?.price?.marketCap;
+
+    const costOfEquity = 0.1;
+    const costOfDebt = 0.05;
+    const taxRate = 0.3;
+    const totalCapital = equity + debt;
+    const wacc =
+      (equity / totalCapital) * costOfEquity +
+      (debt / totalCapital) * costOfDebt * (1 - taxRate);
 
     return res.status(200).json({
       pricePerShare,
