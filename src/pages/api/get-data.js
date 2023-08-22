@@ -13,6 +13,7 @@ export default async (req, res) => {
         'financialData',
         'cashflowStatementHistory',
         'balanceSheetHistory',
+        'balanceSheetHistoryQuarterly',
       ],
     });
 
@@ -23,9 +24,10 @@ export default async (req, res) => {
         .capitalExpenditures;
 
     const cash =
-      result?.balanceSheetHistory?.balanceSheetStatements?.[0].cash +
-      result?.balanceSheetHistory?.balanceSheetStatements?.[0]
-        .shortTermInvestments;
+      (result?.balanceSheetHistoryQuarterly?.balanceSheetStatements?.[0]
+        ?.cash || 0) +
+      (result?.balanceSheetHistoryQuarterly?.balanceSheetStatements?.[0]
+        ?.shortTermInvestments || 0);
 
     const debt =
       result?.balanceSheetHistory?.balanceSheetStatements?.[0].longTermDebt +
@@ -43,7 +45,7 @@ export default async (req, res) => {
     const currencySymbol = result.price.currencySymbol;
     const dividendYield = result.summaryDetail.dividendYield ?? 0;
     const peRation = result.summaryDetail.trailingPE;
-    const perpetualGrowthRate = 3;
+    const perpetualGrowthRate = 3.0;
 
     const isInvalid = growthRate === null || peRation === null;
 
@@ -65,6 +67,12 @@ export default async (req, res) => {
       currencySymbol,
       dividendYield: (dividendYield * 100).toFixed(2),
       peRation,
+      freeCashFlow,
+      cash,
+      debt,
+      sharesOutstanding,
+      perpetualGrowthRate,
+      wacc: (wacc * 100).toFixed(2),
       isInvalid,
     });
   } catch (error) {
