@@ -1,6 +1,6 @@
 import { ICalculatedModel } from '@/types/calculated-model';
 import { IModelParameters } from '@/types/model-parameters';
-import { shouldBuy } from '@/utils/calculator-service';
+import { floatToString, shouldBuy } from '@/utils/calculator-service';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -55,10 +55,10 @@ const CalculatorOutputRegular = ({
         <Tbody>
           <Tr>
             <Td textAlign="center" bg="white">
-              {modelParameters.pricePerShare}
+              {floatToString(modelParameters.pricePerShare)}
             </Td>
             <Td textAlign="center" bg="white">
-              {intrinsicValue.intrinsicValue}
+              {floatToString(intrinsicValue.intrinsicValue)}
             </Td>
             <Td
               textAlign="center"
@@ -67,14 +67,14 @@ const CalculatorOutputRegular = ({
                 intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'
               }
             >
-              {intrinsicValue.acceptableBuyPrice}
+              {floatToString(intrinsicValue.acceptableBuyPrice)}
             </Td>
             <Td
               textAlign="center"
               bg="white"
               textColor={getPlValutationColor()}
             >
-              {intrinsicValue.plValutation}
+              {floatToString(intrinsicValue.plValutation)}
             </Td>
             <Td
               textAlign="center"

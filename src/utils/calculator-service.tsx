@@ -9,35 +9,25 @@ function calculateGrahamValuation(
   currentYieldOfBond: number,
   marginOfSafety: number
 ) {
-  const calculateValue = (
-    earningsPerShare *
+  const calculateValue = (earningsPerShare *
     (7 + 1 * growthRate) *
-    (4.4 / currentYieldOfBond)
-  ).toFixed(2);
+    (4.4 / currentYieldOfBond)) as number;
 
-  const value = parseFloat(calculateValue) > 0 ? calculateValue : '0.00';
+  const value = calculateValue > 0 ? calculateValue : 0.0;
 
-  const differencePercentage = (
-    ((parseFloat(value) - pricePerShare) / pricePerShare) *
-    100
-  ).toFixed(2);
-  const calculatedAcceptableBuyPrice = (
-    parseFloat(value) *
-    ((100 - marginOfSafety) / 100)
-  ).toFixed(2);
+  const differencePercentage = ((value - pricePerShare) / pricePerShare) * 100;
+  const calculatedAcceptableBuyPrice = value * ((100 - marginOfSafety) / 100);
 
   const acceptableBuyPrice =
-    parseFloat(calculatedAcceptableBuyPrice) > 0
-      ? calculatedAcceptableBuyPrice
-      : '0.00';
+    calculatedAcceptableBuyPrice > 0 ? calculatedAcceptableBuyPrice : 0.0;
 
   const belowIntrinsicValue =
-    pricePerShare <= parseFloat(acceptableBuyPrice) && pricePerShare !== 0;
+    pricePerShare <= acceptableBuyPrice && pricePerShare !== 0;
 
   return {
-    intrinsicValue: parseFloat(value).toFixed(2),
-    differencePercentage: parseFloat(differencePercentage),
-    acceptableBuyPrice: parseFloat(acceptableBuyPrice),
+    intrinsicValue: value,
+    differencePercentage: differencePercentage,
+    acceptableBuyPrice: acceptableBuyPrice,
     belowIntrinsicValue: belowIntrinsicValue,
   };
 }
@@ -47,11 +37,8 @@ function calculatePeterLynchValutation(
   dividendYield: number,
   peRatio: number
 ) {
-  const plValutation = ((earningsPerShare + dividendYield) / peRatio).toFixed(
-    2
-  );
-
-  const belowIntrinsicValue = parseFloat(plValutation) >= 1.5;
+  const plValutation = (earningsPerShare + dividendYield) / peRatio;
+  const belowIntrinsicValue = plValutation >= 1.5;
 
   return {
     plValutation,
@@ -83,15 +70,11 @@ export function calculateIntrinsicValue(
   );
 
   return {
-    intrinsicValue: parseFloat(grahamValuation.intrinsicValue),
-    differencePercentage: parseFloat(
-      grahamValuation.differencePercentage.toFixed(2)
-    ),
-    acceptableBuyPrice: parseFloat(
-      grahamValuation.acceptableBuyPrice.toFixed(2)
-    ),
+    intrinsicValue: grahamValuation.intrinsicValue,
+    differencePercentage: grahamValuation.differencePercentage,
+    acceptableBuyPrice: grahamValuation.acceptableBuyPrice,
     belowIntrinsicValue: grahamValuation.belowIntrinsicValue,
-    plValutation: parseFloat(peterLynchValutation.plValutation),
+    plValutation: peterLynchValutation.plValutation,
     isInvalid: !(
       grahamValuation.belowIntrinsicValue ||
       peterLynchValutation.belowIntrinsicValue
@@ -101,4 +84,18 @@ export function calculateIntrinsicValue(
 
 export function shouldBuy(belowIntrinsicValue: boolean, plValutation: number) {
   return belowIntrinsicValue && plValutation >= 1;
+}
+
+export function floatToString(value: number): string {
+  const returnVal = value.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  console.log(returnVal);
+
+  return value.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
