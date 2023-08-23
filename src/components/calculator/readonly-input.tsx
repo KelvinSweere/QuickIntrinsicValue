@@ -1,3 +1,4 @@
+import { floatToString } from '@/utils/calculator-service';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { Box, Flex, Input, Text, Tooltip } from '@chakra-ui/react';
 
@@ -31,7 +32,14 @@ const ReadonlyInput = ({
             {symbol}
           </Text>
         )}
-        <Input isReadOnly value={value.toString()} />
+        <Input
+          isReadOnly
+          value={
+            (value as number)
+              ? floatToString(value as number)
+              : value.toString()
+          }
+        />
       </Flex>
     </Box>
   );

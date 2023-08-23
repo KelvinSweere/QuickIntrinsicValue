@@ -102,3 +102,10 @@ export function calculateIntrinsicValue(
 export function shouldBuy(belowIntrinsicValue: boolean, plValutation: number) {
   return belowIntrinsicValue && plValutation >= 1;
 }
+
+export function floatToString(value: number): string {
+  return value.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
