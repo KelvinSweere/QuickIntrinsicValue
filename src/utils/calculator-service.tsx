@@ -87,13 +87,6 @@ export function shouldBuy(belowIntrinsicValue: boolean, plValutation: number) {
 }
 
 export function floatToString(value: number): string {
-  const returnVal = value.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
-  console.log(returnVal);
-
   return value.toLocaleString('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
