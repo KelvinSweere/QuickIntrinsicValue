@@ -1,6 +1,6 @@
 import { ICalculatedModel } from '@/types/calculated-model';
 import { IModelParameters } from '@/types/model-parameters';
-import { floatToString, shouldBuy } from '@/utils/calculator-service';
+import { floatToString } from '@/utils/calculator-service';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -24,7 +24,7 @@ const CalculatorOutputRegular = ({
 }: ICalculatorOutputRegularProps) => {
   const getPlValutationColor = (): string => {
     const plValutation: number = intrinsicValue.plValutation;
-    if (plValutation < 1) {
+    if (plValutation < 1 || isNaN(plValutation)) {
       return 'red.500';
     } else if (plValutation < 1.5) {
       return 'yellow.500';
@@ -81,20 +81,10 @@ const CalculatorOutputRegular = ({
               bg="white"
               fontWeight="bold"
               color={
-                shouldBuy(
-                  intrinsicValue.belowIntrinsicValue,
-                  intrinsicValue.plValutation
-                )
-                  ? 'green.500'
-                  : 'red.500'
+                intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'
               }
             >
-              {shouldBuy(
-                intrinsicValue.belowIntrinsicValue,
-                intrinsicValue.plValutation
-              )
-                ? 'Yes'
-                : 'No'}
+              {intrinsicValue.belowIntrinsicValue ? 'Yes' : 'No'}
             </Td>
           </Tr>
         </Tbody>
