@@ -1,5 +1,4 @@
-import { ICalculatedModel } from '@/types/calculated-model';
-import { ICashFlowDiscountModel } from '@/types/cash-flow-discount-model';
+import { ICalculatedModel, IIntrinsicValue } from '@/types/calculated-model';
 
 function getEnterpriseValue(discountRate: number, cashFlows: number[]) {
   const npv = cashFlows.reduce(
@@ -21,7 +20,7 @@ export function calculateDiscountedCashFlowValuation(
   cashAndEquivalents: number,
   totalDebt: number,
   shareOutstanding: number
-): ICashFlowDiscountModel {
+): IIntrinsicValue {
   const years = 5;
   const freeCashFlows: number[] = [];
   for (let i = 0; i < years; i++) {
@@ -52,9 +51,9 @@ export function calculateDiscountedCashFlowValuation(
 
   return {
     intrinsicValue: parseFloat(intrinsicValue.toFixed(2)),
-    upside: parseFloat(upside.toFixed(2)),
+    differencePercentage: parseFloat(upside.toFixed(2)),
     acceptableBuyPrice: parseFloat(acceptableBuyPrice.toFixed(2)),
-    belowIntrinsicValue,
+    belowIntrinsicValue: belowIntrinsicValue,
   };
 }
 
@@ -64,7 +63,7 @@ function calculateGrahamValuation(
   growthRate: number,
   currentYieldOfBond: number,
   marginOfSafety: number
-) {
+): IIntrinsicValue {
   const calculateValue = (earningsPerShare *
     (7 + 1 * growthRate) *
     (4.4 / currentYieldOfBond)) as number;
@@ -109,7 +108,13 @@ export function calculateIntrinsicValue(
   currentYieldOfBond: number,
   marginOfSafety: number,
   dividendYield: number,
-  peRatio: number
+  peRatio: number,
+  freeCashFlow: number,
+  discountRate: number,
+  perpetualGrowthRate: number,
+  cashAndEquivalents: number,
+  totalDebt: number,
+  shareOutstanding: number
 ): ICalculatedModel {
   const grahamValuation = calculateGrahamValuation(
     pricePerShare,
@@ -119,6 +124,18 @@ export function calculateIntrinsicValue(
     marginOfSafety
   );
 
+  const dcfValuation = calculateDiscountedCashFlowValuation(
+    pricePerShare,
+    growthRate,
+    marginOfSafety,
+    freeCashFlow,
+    discountRate,
+    perpetualGrowthRate,
+    cashAndEquivalents,
+    totalDebt,
+    shareOutstanding
+  );
+
   const peterLynchValutation = calculatePeterLynchValutation(
     earningsPerShare,
     dividendYield,
@@ -126,15 +143,9 @@ export function calculateIntrinsicValue(
   );
 
   return {
-    intrinsicValue: grahamValuation.intrinsicValue,
-    differencePercentage: grahamValuation.differencePercentage,
-    acceptableBuyPrice: grahamValuation.acceptableBuyPrice,
-    belowIntrinsicValue: grahamValuation.belowIntrinsicValue,
+    grahamValutation: grahamValuation,
+    dcfValutation: dcfValuation,
     plValutation: peterLynchValutation.plValutation,
-    isInvalid: !(
-      grahamValuation.belowIntrinsicValue ||
-      peterLynchValutation.belowIntrinsicValue
-    ),
   };
 }
 

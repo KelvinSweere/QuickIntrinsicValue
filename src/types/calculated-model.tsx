@@ -1,17 +1,28 @@
-export interface ICalculatedModel {
+export interface IIntrinsicValue {
   intrinsicValue: number;
-  differencePercentage: number;
   acceptableBuyPrice: number;
+  differencePercentage: number;
   belowIntrinsicValue: boolean;
+}
+
+export interface ICalculatedModel {
+  grahamValutation: IIntrinsicValue;
+  dcfValutation: IIntrinsicValue;
   plValutation: number;
-  isInvalid: boolean;
 }
 
 export const defaultIntrinsicValue: ICalculatedModel = {
-  intrinsicValue: 0,
-  differencePercentage: 0,
-  acceptableBuyPrice: 0,
-  belowIntrinsicValue: false,
+  grahamValutation: {
+    intrinsicValue: 0,
+    acceptableBuyPrice: 0,
+    differencePercentage: 0,
+    belowIntrinsicValue: false,
+  },
+  dcfValutation: {
+    intrinsicValue: 0,
+    acceptableBuyPrice: 0,
+    differencePercentage: 0,
+    belowIntrinsicValue: false,
+  },
   plValutation: 0,
-  isInvalid: false,
 };

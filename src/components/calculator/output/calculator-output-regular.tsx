@@ -40,15 +40,21 @@ const CalculatorOutputRegular = ({
       <Table variant="simple" colorScheme="red">
         <Thead>
           <Tr>
-            <Th textAlign="center">Stock price</Th>
-            <Th textAlign="center">Intrinsic Value</Th>
-            <Th textAlign="center">Acceptable Buy Price</Th>
+            <Th textAlign="center">Current stock price</Th>
+            <Th textAlign="center">Acceptable buy price Graham</Th>
+            <Th textAlign="center">
+              Acceptable buy price DSF
+              <Tooltip label="Discounted Cash Flow">
+                <InfoOutlineIcon ml="1" w={3} h={4} color="gray.500" />
+              </Tooltip>
+            </Th>
             <Th textAlign="center">
               Peter Lynch Valuation{' '}
               <Tooltip label="&lt;1 overvalued, &lt;1.5 fairly valued, &gt;2 undervalued">
                 <InfoOutlineIcon ml="1" w={3} h={4} color="gray.500" />
               </Tooltip>
             </Th>
+
             <Th textAlign="center">Should Buy</Th>
           </Tr>
         </Thead>
@@ -57,17 +63,29 @@ const CalculatorOutputRegular = ({
             <Td textAlign="center" bg="white">
               {floatToString(modelParameters.pricePerShare)}
             </Td>
-            <Td textAlign="center" bg="white">
-              {floatToString(intrinsicValue.intrinsicValue)}
+            <Td
+              textAlign="center"
+              bg="white"
+              textColor={
+                intrinsicValue.grahamValutation.belowIntrinsicValue
+                  ? 'green.500'
+                  : 'red.500'
+              }
+            >
+              {floatToString(
+                intrinsicValue.grahamValutation.acceptableBuyPrice
+              )}
             </Td>
             <Td
               textAlign="center"
               bg="white"
               textColor={
-                intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'
+                intrinsicValue.dcfValutation.belowIntrinsicValue
+                  ? 'green.500'
+                  : 'red.500'
               }
             >
-              {floatToString(intrinsicValue.acceptableBuyPrice)}
+              {floatToString(intrinsicValue.dcfValutation.acceptableBuyPrice)}
             </Td>
             <Td
               textAlign="center"
@@ -81,10 +99,16 @@ const CalculatorOutputRegular = ({
               bg="white"
               fontWeight="bold"
               color={
-                intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'
+                intrinsicValue.grahamValutation.belowIntrinsicValue &&
+                intrinsicValue.dcfValutation.belowIntrinsicValue &&
+                intrinsicValue.plValutation < 1
+                  ? 'green.500'
+                  : 'red.500'
               }
             >
-              {intrinsicValue.belowIntrinsicValue ? 'Yes' : 'No'}
+              {intrinsicValue.grahamValutation.belowIntrinsicValue
+                ? 'Yes'
+                : 'No'}
             </Td>
           </Tr>
         </Tbody>

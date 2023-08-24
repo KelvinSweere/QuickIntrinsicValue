@@ -47,7 +47,13 @@ const IntrinsicValueCalculator = () => {
         Number(modelParameters.currentYieldOfBond),
         Number(marginOfSafety),
         Number(modelParameters.dividendYield),
-        Number(modelParameters.peRation)
+        Number(modelParameters.peRation),
+        Number(modelParameters.freeCashFlow),
+        Number(modelParameters.wacc),
+        Number(modelParameters.perpetualGrowthRate),
+        Number(modelParameters.cash),
+        Number(modelParameters.debt),
+        Number(modelParameters.sharesOutstanding)
       )
     );
   }, [modelParameters]);

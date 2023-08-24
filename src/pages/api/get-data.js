@@ -11,29 +11,16 @@ export default async (req, res) => {
         'earningsTrend',
         'summaryDetail',
         'financialData',
-        'cashflowStatementHistoryQuarterly',
-        'balanceSheetHistory',
-        'balanceSheetHistoryQuarterly',
       ],
     });
 
-    const freeCashFlow =
-      result?.cashflowStatementHistoryQuarterly?.cashflowStatements?.[0]
-        .totalCashFromOperatingActivities +
-      result?.cashflowStatementHistoryQuarterly?.cashflowStatements?.[0]
-        .capitalExpenditures;
+    const freeCashFlow = result.financialData.freeCashflow;
+    const cash = result.financialData.totalCash;
+    const debt = result.financialData.totalDebt;
 
-    const cash =
-      (result?.balanceSheetHistoryQuarterly?.balanceSheetStatements?.[0]
-        ?.cash || 0) +
-      (result?.balanceSheetHistoryQuarterly?.balanceSheetStatements?.[0]
-        ?.shortTermInvestments || 0);
-
-    const debt =
-      result?.balanceSheetHistoryQuarterly?.balanceSheetStatements?.[0]
-        .longTermDebt +
-      result?.balanceSheetHistoryQuarterly?.balanceSheetStatements?.[0]
-        .shortLongTermDebt;
+    console.log('freeCashFlow ', freeCashFlow);
+    console.log('cash ', cash);
+    console.log('debt ', debt);
 
     const sharesOutstanding = result?.defaultKeyStatistics?.sharesOutstanding;
 

@@ -28,7 +28,7 @@ describe('calculateDiscountedCashFlowValuation', () => {
     );
 
     expect(result.intrinsicValue).toEqual(88.73);
-    expect(result.upside).toEqual(-33.77);
+    expect(result.differencePercentage).toEqual(-33.77);
     expect(result.acceptableBuyPrice).toEqual(62.11);
     expect(result.belowIntrinsicValue).toEqual(false);
   });
