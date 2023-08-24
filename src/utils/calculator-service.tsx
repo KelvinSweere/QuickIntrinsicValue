@@ -1,6 +1,53 @@
 import { ICalculatedModel } from '@/types/calculated-model';
 
-function calculateDiscountedCashFlowValuation() {}
+export function calculateDiscountedCashFlowValuation(
+  pricePerShare: number,
+  growthRate: number,
+  marginOfSafety: number,
+  freeCashFlow: number,
+  discountRate: number,
+  perpetualGrowthRate: number
+) {
+  const years = 5;
+  const freeCashFlows: number[] = [];
+  for (let i = 0; i < years; i++) {
+    const freeCashFlowInFuture = freeCashFlow * Math.pow(1 + growthRate, i + 1);
+    freeCashFlows.push(freeCashFlowInFuture);
+  }
+
+  console.log(freeCashFlows);
+
+  // // Calculate the present value of the free cash flows
+  // let presentValue = 0;
+  // for (let i = 0; i < freeCashFlows.length; i++) {
+  //   presentValue += freeCashFlows[i] / Math.pow(1 + discountRate, i + 1);
+  // }
+
+  // // Add the terminal value (assuming constant growth)
+  // const lastCashFlow = freeCashFlows[freeCashFlows.length - 1];
+  // const terminalValue =
+  //   (lastCashFlow * (1 + discountRate)) / (discountRate - growthRate);
+
+  // // Calculate the intrinsic value
+  // const intrinsicValue = presentValue + terminalValue;
+
+  // // Calculate other metrics
+  // const differencePercentage =
+  //   ((intrinsicValue - pricePerShare) / pricePerShare) * 100;
+  // const calculatedAcceptableBuyPrice =
+  //   intrinsicValue * ((100 - marginOfSafety) / 100);
+  // const acceptableBuyPrice =
+  //   calculatedAcceptableBuyPrice > 0 ? calculatedAcceptableBuyPrice : 0.0;
+  // const belowIntrinsicValue =
+  //   pricePerShare <= acceptableBuyPrice && pricePerShare !== 0;
+
+  return {
+    // intrinsicValue,
+    // differencePercentage,
+    // acceptableBuyPrice,
+    // belowIntrinsicValue,
+  };
+}
 
 function calculateGrahamValuation(
   pricePerShare: number,
