@@ -15,9 +15,20 @@
         // example of overriding a rule
         "storybook/hierarchy-separator": "error"
       }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
+      "env": {
+        "jest": true
+      }
     }
   ],
   "rules": {
-    "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }]
+    "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }],
+    "react/jsx-key": [
+      "error",
+      { "checkFragmentShorthand": true, "warnOnDuplicates": true }
+    ],
+    "react/no-array-index-key": ["error"]
   }
 }
