@@ -1,4 +1,15 @@
 import { ICalculatedModel } from '@/types/calculated-model';
+import { ICashFlowDiscountModel } from '@/types/cash-flow-discount-model';
+
+function getEnterpriseValue(discountRate: number, cashFlows: number[]) {
+  const npv = cashFlows.reduce(
+    (accumulator, currentValue, index) =>
+      accumulator + currentValue / Math.pow(1 + discountRate / 100, index + 1),
+    0
+  );
+
+  return npv;
+}
 
 export function calculateDiscountedCashFlowValuation(
   pricePerShare: number,
@@ -6,46 +17,44 @@ export function calculateDiscountedCashFlowValuation(
   marginOfSafety: number,
   freeCashFlow: number,
   discountRate: number,
-  perpetualGrowthRate: number
-) {
+  perpetualGrowthRate: number,
+  cashAndEquivalents: number,
+  totalDebt: number,
+  shareOutstanding: number
+): ICashFlowDiscountModel {
   const years = 5;
   const freeCashFlows: number[] = [];
   for (let i = 0; i < years; i++) {
-    const freeCashFlowInFuture = freeCashFlow * Math.pow(1 + growthRate, i + 1);
+    const freeCashFlowInFuture =
+      freeCashFlow * Math.pow(1 + growthRate / 100.0, i + 1);
     freeCashFlows.push(freeCashFlowInFuture);
   }
 
-  console.log(freeCashFlows);
+  const freeCashFlowOver5Years = freeCashFlows[freeCashFlows.length - 1];
+  const terminalValue =
+    (freeCashFlowOver5Years * (1 + perpetualGrowthRate / 100.0)) /
+    ((discountRate - perpetualGrowthRate) / 100.0);
 
-  // // Calculate the present value of the free cash flows
-  // let presentValue = 0;
-  // for (let i = 0; i < freeCashFlows.length; i++) {
-  //   presentValue += freeCashFlows[i] / Math.pow(1 + discountRate, i + 1);
-  // }
+  freeCashFlows[freeCashFlows.length - 1] += terminalValue;
 
-  // // Add the terminal value (assuming constant growth)
-  // const lastCashFlow = freeCashFlows[freeCashFlows.length - 1];
-  // const terminalValue =
-  //   (lastCashFlow * (1 + discountRate)) / (discountRate - growthRate);
+  const enterpriseValue = getEnterpriseValue(discountRate, freeCashFlows);
 
-  // // Calculate the intrinsic value
-  // const intrinsicValue = presentValue + terminalValue;
+  const equityValue = enterpriseValue + cashAndEquivalents - totalDebt;
 
-  // // Calculate other metrics
-  // const differencePercentage =
-  //   ((intrinsicValue - pricePerShare) / pricePerShare) * 100;
-  // const calculatedAcceptableBuyPrice =
-  //   intrinsicValue * ((100 - marginOfSafety) / 100);
-  // const acceptableBuyPrice =
-  //   calculatedAcceptableBuyPrice > 0 ? calculatedAcceptableBuyPrice : 0.0;
-  // const belowIntrinsicValue =
-  //   pricePerShare <= acceptableBuyPrice && pricePerShare !== 0;
+  const intrinsicValue = equityValue / shareOutstanding;
+
+  const upside = ((intrinsicValue - pricePerShare) / pricePerShare) * 100;
+
+  const acceptableBuyPrice = intrinsicValue * ((100 - marginOfSafety) / 100);
+
+  const belowIntrinsicValue =
+    pricePerShare <= acceptableBuyPrice && pricePerShare !== 0;
 
   return {
-    // intrinsicValue,
-    // differencePercentage,
-    // acceptableBuyPrice,
-    // belowIntrinsicValue,
+    intrinsicValue: parseFloat(intrinsicValue.toFixed(2)),
+    upside: parseFloat(upside.toFixed(2)),
+    acceptableBuyPrice: parseFloat(acceptableBuyPrice.toFixed(2)),
+    belowIntrinsicValue,
   };
 }
 
