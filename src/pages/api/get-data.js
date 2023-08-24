@@ -18,10 +18,6 @@ export default async (req, res) => {
     const cash = result.financialData.totalCash;
     const debt = result.financialData.totalDebt;
 
-    console.log('freeCashFlow ', freeCashFlow);
-    console.log('cash ', cash);
-    console.log('debt ', debt);
-
     const sharesOutstanding = result?.defaultKeyStatistics?.sharesOutstanding;
 
     const growthRate = result.earningsTrend.trend?.find(
