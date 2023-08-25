@@ -106,7 +106,9 @@ const CalculatorOutputRegular = ({
                   : 'red.500'
               }
             >
-              {intrinsicValue.grahamValutation.belowIntrinsicValue
+              {intrinsicValue.grahamValutation.belowIntrinsicValue &&
+              intrinsicValue.dcfValutation.belowIntrinsicValue &&
+              intrinsicValue.plValutation < 1
                 ? 'Yes'
                 : 'No'}
             </Td>

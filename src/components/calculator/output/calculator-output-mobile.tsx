@@ -28,15 +28,16 @@ const CalculatorOutputMobile = ({
       />
 
       <ReadonlyInput
-        heading="Intrinsic Value: "
+        heading="Acceptable buy price Graham: "
         symbol={modelParameters.currencySymbol}
-        value={intrinsicValue.intrinsicValue}
+        value={intrinsicValue.grahamValutation.acceptableBuyPrice}
       />
 
       <ReadonlyInput
-        heading="Acceptable Buy Price: "
+        heading="Acceptable buy price DSF: "
         symbol={modelParameters.currencySymbol}
-        value={intrinsicValue.acceptableBuyPrice}
+        value={intrinsicValue.dcfValutation.acceptableBuyPrice}
+        tooltipText="Discounted Cash Flow"
       />
 
       <ReadonlyInput
@@ -51,10 +52,20 @@ const CalculatorOutputMobile = ({
         </Text>
         <Text
           fontWeight="bold"
-          color={intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'}
+          color={
+            intrinsicValue.grahamValutation.belowIntrinsicValue &&
+            intrinsicValue.dcfValutation.belowIntrinsicValue &&
+            intrinsicValue.plValutation < 1
+              ? 'green.500'
+              : 'red.500'
+          }
           mx="auto"
         >
-          {intrinsicValue.belowIntrinsicValue ? 'Yes' : 'No'}
+          {intrinsicValue.grahamValutation.belowIntrinsicValue &&
+          intrinsicValue.dcfValutation.belowIntrinsicValue &&
+          intrinsicValue.plValutation < 1
+            ? 'Yes'
+            : 'No'}
         </Text>
       </Flex>
     </Box>
