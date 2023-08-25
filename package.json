@@ -16,6 +16,7 @@
     "@auth0/nextjs-auth0": "^2.6.3",
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.5.1",
+    "@ctrl/react-adsense": "^1.7.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@next/font": "13.1.6",

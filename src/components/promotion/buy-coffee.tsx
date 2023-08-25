@@ -29,20 +29,16 @@ const BuyCoffee = () => {
           left="2rem"
           zIndex="9999"
           border="0"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
           _hover={{
             '.coffee-icon': {
               animation: `${buzz} 560ms ease-in-out`,
             },
           }}
         >
-          <Circle
-            bgColor="white"
-            minW="5rem"
-            minH="5rem"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Circle bgColor="white" minW="5rem" minH="5rem">
             <Image
               className="coffee-icon"
               src="svg/buy-me-a-coffee.svg"
