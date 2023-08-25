@@ -145,8 +145,8 @@ export function calculateIntrinsicValue(
   );
 
   const belowIntrinsicValue =
-    grahamValuation.belowIntrinsicValue ||
-    dcfValuation.belowIntrinsicValue ||
+    grahamValuation.belowIntrinsicValue &&
+    dcfValuation.belowIntrinsicValue &&
     peterLynchValutation.belowIntrinsicValue;
 
   return {
