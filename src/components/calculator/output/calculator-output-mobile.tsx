@@ -42,7 +42,7 @@ const CalculatorOutputMobile = ({
 
       <ReadonlyInput
         heading="Peter Lynch Valuation: "
-        value={intrinsicValue.plValutation}
+        value={intrinsicValue.plValutation.plValutation}
         tooltipText="<1 overvalued, <1.5 fairly valued, >2 undervalued"
       />
 
@@ -52,20 +52,10 @@ const CalculatorOutputMobile = ({
         </Text>
         <Text
           fontWeight="bold"
-          color={
-            intrinsicValue.grahamValutation.belowIntrinsicValue &&
-            intrinsicValue.dcfValutation.belowIntrinsicValue &&
-            intrinsicValue.plValutation < 1
-              ? 'green.500'
-              : 'red.500'
-          }
+          color={intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'}
           mx="auto"
         >
-          {intrinsicValue.grahamValutation.belowIntrinsicValue &&
-          intrinsicValue.dcfValutation.belowIntrinsicValue &&
-          intrinsicValue.plValutation < 1
-            ? 'Yes'
-            : 'No'}
+          {intrinsicValue.belowIntrinsicValue ? 'Yes' : 'No'}
         </Text>
       </Flex>
     </Box>

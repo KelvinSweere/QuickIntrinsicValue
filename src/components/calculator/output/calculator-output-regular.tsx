@@ -23,7 +23,7 @@ const CalculatorOutputRegular = ({
   intrinsicValue,
 }: ICalculatorOutputRegularProps) => {
   const getPlValutationColor = (): string => {
-    const plValutation: number = intrinsicValue.plValutation;
+    const plValutation: number = intrinsicValue.plValutation.plValutation;
     if (plValutation < 1 || isNaN(plValutation)) {
       return 'red.500';
     } else if (plValutation < 1.5) {
@@ -92,25 +92,17 @@ const CalculatorOutputRegular = ({
               bg="white"
               textColor={getPlValutationColor()}
             >
-              {floatToString(intrinsicValue.plValutation)}
+              {floatToString(intrinsicValue.plValutation.plValutation)}
             </Td>
             <Td
               textAlign="center"
               bg="white"
               fontWeight="bold"
               color={
-                intrinsicValue.grahamValutation.belowIntrinsicValue &&
-                intrinsicValue.dcfValutation.belowIntrinsicValue &&
-                intrinsicValue.plValutation < 1
-                  ? 'green.500'
-                  : 'red.500'
+                intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'
               }
             >
-              {intrinsicValue.grahamValutation.belowIntrinsicValue &&
-              intrinsicValue.dcfValutation.belowIntrinsicValue &&
-              intrinsicValue.plValutation < 1
-                ? 'Yes'
-                : 'No'}
+              {intrinsicValue.belowIntrinsicValue ? 'Yes' : 'No'}
             </Td>
           </Tr>
         </Tbody>

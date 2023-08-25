@@ -146,7 +146,7 @@ export function calculateIntrinsicValue(
   return {
     grahamValutation: grahamValuation,
     dcfValutation: dcfValuation,
-    plValutation: peterLynchValutation.plValutation,
+    plValutation: peterLynchValutation,
   };
 }
 
