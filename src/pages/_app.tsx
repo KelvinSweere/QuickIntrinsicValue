@@ -4,6 +4,7 @@ import '@/styles/globals.scss';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
+import Script from 'next/script';
 import { Provider } from 'react-redux';
 
 const genericTheme = extendTheme({
@@ -22,6 +23,12 @@ const genericTheme = extendTheme({
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <Provider store={store}>
+      <Script
+        id="adsbygoogle-init"
+        strategy="afterInteractive"
+        crossOrigin="anonymous"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2806858064287732"
+      />
       <ChakraProvider theme={genericTheme}>
         <Layout>
           <Component {...pageProps} />
