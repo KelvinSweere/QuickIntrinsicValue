@@ -1,6 +1,6 @@
 import { ICalculatedModel } from '@/types/calculated-model';
 import { IModelParameters } from '@/types/model-parameters';
-import { shouldBuy } from '@/utils/calculator-service';
+import { floatToString } from '@/utils/calculator-service';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -23,8 +23,8 @@ const CalculatorOutputRegular = ({
   intrinsicValue,
 }: ICalculatorOutputRegularProps) => {
   const getPlValutationColor = (): string => {
-    const plValutation: number = intrinsicValue.plValutation;
-    if (plValutation < 1) {
+    const plValutation: number = intrinsicValue.plValutation.plValutation;
+    if (plValutation < 1 || isNaN(plValutation)) {
       return 'red.500';
     } else if (plValutation < 1.5) {
       return 'yellow.500';
@@ -40,61 +40,69 @@ const CalculatorOutputRegular = ({
       <Table variant="simple" colorScheme="red">
         <Thead>
           <Tr>
-            <Th textAlign="center">Stock price</Th>
-            <Th textAlign="center">Intrinsic Value</Th>
-            <Th textAlign="center">Acceptable Buy Price</Th>
+            <Th textAlign="center">Current stock price</Th>
+            <Th textAlign="center">Acceptable buy price Graham</Th>
+            <Th textAlign="center">
+              Acceptable buy price DSF
+              <Tooltip label="Discounted Cash Flow">
+                <InfoOutlineIcon ml="1" w={3} h={4} color="gray.500" />
+              </Tooltip>
+            </Th>
             <Th textAlign="center">
               Peter Lynch Valuation{' '}
               <Tooltip label="&lt;1 overvalued, &lt;1.5 fairly valued, &gt;2 undervalued">
                 <InfoOutlineIcon ml="1" w={3} h={4} color="gray.500" />
               </Tooltip>
             </Th>
+
             <Th textAlign="center">Should Buy</Th>
           </Tr>
         </Thead>
         <Tbody>
           <Tr>
             <Td textAlign="center" bg="white">
-              {modelParameters.pricePerShare}
-            </Td>
-            <Td textAlign="center" bg="white">
-              {intrinsicValue.intrinsicValue}
+              {floatToString(modelParameters.pricePerShare)}
             </Td>
             <Td
               textAlign="center"
               bg="white"
               textColor={
-                intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'
+                intrinsicValue.grahamValutation.belowIntrinsicValue
+                  ? 'green.500'
+                  : 'red.500'
               }
             >
-              {intrinsicValue.acceptableBuyPrice}
+              {floatToString(
+                intrinsicValue.grahamValutation.acceptableBuyPrice
+              )}
+            </Td>
+            <Td
+              textAlign="center"
+              bg="white"
+              textColor={
+                intrinsicValue.dcfValutation.belowIntrinsicValue
+                  ? 'green.500'
+                  : 'red.500'
+              }
+            >
+              {floatToString(intrinsicValue.dcfValutation.acceptableBuyPrice)}
             </Td>
             <Td
               textAlign="center"
               bg="white"
               textColor={getPlValutationColor()}
             >
-              {intrinsicValue.plValutation}
+              {floatToString(intrinsicValue.plValutation.plValutation)}
             </Td>
             <Td
               textAlign="center"
               bg="white"
               fontWeight="bold"
               color={
-                shouldBuy(
-                  intrinsicValue.belowIntrinsicValue,
-                  intrinsicValue.plValutation
-                )
-                  ? 'green.500'
-                  : 'red.500'
+                intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'
               }
             >
-              {shouldBuy(
-                intrinsicValue.belowIntrinsicValue,
-                intrinsicValue.plValutation
-              )
-                ? 'Yes'
-                : 'No'}
+              {intrinsicValue.belowIntrinsicValue ? 'Yes' : 'No'}
             </Td>
           </Tr>
         </Tbody>

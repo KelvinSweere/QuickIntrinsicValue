@@ -1,15 +1,19 @@
+import { IIntrinsicValue, IntrinsicValueDefault } from './intrinsic-value';
+import {
+  IPeterLynchValuationModel,
+  PeterLynchValuationModelDefault,
+} from './peter-lynch-valutation-model';
+
 export interface ICalculatedModel {
-  intrinsicValue: number;
-  differencePercentage: number;
-  acceptableBuyPrice: number;
+  grahamValutation: IIntrinsicValue;
+  dcfValutation: IIntrinsicValue;
+  plValutation: IPeterLynchValuationModel;
   belowIntrinsicValue: boolean;
-  plValutation: number;
 }
 
 export const defaultIntrinsicValue: ICalculatedModel = {
-  intrinsicValue: 0,
-  differencePercentage: 0,
-  acceptableBuyPrice: 0,
+  grahamValutation: IntrinsicValueDefault,
+  dcfValutation: IntrinsicValueDefault,
+  plValutation: PeterLynchValuationModelDefault,
   belowIntrinsicValue: false,
-  plValutation: 0,
 };

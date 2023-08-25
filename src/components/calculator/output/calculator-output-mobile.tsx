@@ -1,6 +1,5 @@
 import { ICalculatedModel } from '@/types/calculated-model';
 import { IModelParameters } from '@/types/model-parameters';
-import { shouldBuy } from '@/utils/calculator-service';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import ReadonlyInput from '../readonly-input';
 
@@ -29,20 +28,21 @@ const CalculatorOutputMobile = ({
       />
 
       <ReadonlyInput
-        heading="Intrinsic Value: "
+        heading="Acceptable buy price Graham: "
         symbol={modelParameters.currencySymbol}
-        value={intrinsicValue.intrinsicValue}
+        value={intrinsicValue.grahamValutation.acceptableBuyPrice}
       />
 
       <ReadonlyInput
-        heading="Acceptable Buy Price: "
+        heading="Acceptable buy price DSF: "
         symbol={modelParameters.currencySymbol}
-        value={intrinsicValue.acceptableBuyPrice}
+        value={intrinsicValue.dcfValutation.acceptableBuyPrice}
+        tooltipText="Discounted Cash Flow"
       />
 
       <ReadonlyInput
         heading="Peter Lynch Valuation: "
-        value={intrinsicValue.plValutation}
+        value={intrinsicValue.plValutation.plValutation}
         tooltipText="<1 overvalued, <1.5 fairly valued, >2 undervalued"
       />
 
@@ -52,22 +52,10 @@ const CalculatorOutputMobile = ({
         </Text>
         <Text
           fontWeight="bold"
-          color={
-            shouldBuy(
-              intrinsicValue.belowIntrinsicValue,
-              intrinsicValue.plValutation
-            )
-              ? 'green.500'
-              : 'red.500'
-          }
+          color={intrinsicValue.belowIntrinsicValue ? 'green.500' : 'red.500'}
           mx="auto"
         >
-          {shouldBuy(
-            intrinsicValue.belowIntrinsicValue,
-            intrinsicValue.plValutation
-          )
-            ? 'Yes'
-            : 'No'}
+          {intrinsicValue.belowIntrinsicValue ? 'Yes' : 'No'}
         </Text>
       </Flex>
     </Box>
