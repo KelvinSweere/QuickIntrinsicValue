@@ -44,7 +44,8 @@ export function calculateDiscountedCashFlowValuation(
 
   const upside = ((intrinsicValue - pricePerShare) / pricePerShare) * 100;
 
-  const acceptableBuyPrice = intrinsicValue * ((100 - marginOfSafety) / 100);
+  let acceptableBuyPrice = intrinsicValue * ((100 - marginOfSafety) / 100);
+  acceptableBuyPrice = acceptableBuyPrice > 0 ? acceptableBuyPrice : 0.0;
 
   const belowIntrinsicValue =
     pricePerShare <= acceptableBuyPrice && pricePerShare !== 0;
