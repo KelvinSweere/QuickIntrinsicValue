@@ -1,4 +1,5 @@
-import { ICalculatedModel, IIntrinsicValue } from '@/types/calculated-model';
+import { ICalculatedModel } from '@/types/calculated-model';
+import { IIntrinsicValue } from '@/types/intrinsic-value';
 
 function getEnterpriseValue(discountRate: number, cashFlows: number[]) {
   const npv = cashFlows.reduce(
@@ -143,10 +144,16 @@ export function calculateIntrinsicValue(
     peRatio
   );
 
+  const belowIntrinsicValue =
+    grahamValuation.belowIntrinsicValue ||
+    dcfValuation.belowIntrinsicValue ||
+    peterLynchValutation.belowIntrinsicValue;
+
   return {
     grahamValutation: grahamValuation,
     dcfValutation: dcfValuation,
     plValutation: peterLynchValutation,
+    belowIntrinsicValue: belowIntrinsicValue,
   };
 }
 
