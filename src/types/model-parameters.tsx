@@ -1,4 +1,5 @@
 export interface IModelParameters {
+  stockName: string;
   pricePerShare: number;
   earningsPerShare: number;
   growthRate: number;
@@ -16,6 +17,7 @@ export interface IModelParameters {
 }
 
 export const defaultModelParameters: IModelParameters = {
+  stockName: '',
   pricePerShare: 0,
   earningsPerShare: 0,
   growthRate: 0,

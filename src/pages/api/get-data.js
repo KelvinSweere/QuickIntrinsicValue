@@ -14,6 +14,7 @@ export default async (req, res) => {
       ],
     });
 
+    const stockName = result?.price?.longName ?? '';
     const freeCashFlow = result.financialData.freeCashflow;
     const cash = result.financialData.totalCash;
     const debt = result.financialData.totalDebt;
@@ -44,6 +45,7 @@ export default async (req, res) => {
       (debt / totalCapital) * costOfDebt * (1 - taxRate);
 
     return res.status(200).json({
+      stockName,
       pricePerShare,
       earningsPerShare,
       growthRate: (growthRate * 100).toFixed(2),

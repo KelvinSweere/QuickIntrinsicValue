@@ -34,7 +34,9 @@ const ReadonlyInput = ({
         )}
         <Input
           isReadOnly
-          value={(value as number) ? floatToString(value as number) : value}
+          value={
+            typeof value === 'number' ? floatToString(value as number) : value
+          }
         />
       </Flex>
     </Box>
