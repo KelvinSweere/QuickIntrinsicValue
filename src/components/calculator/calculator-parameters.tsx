@@ -22,12 +22,17 @@ const CalculatorParameters = ({
           <form>
             <Box display="grid" gridGap={3}>
               <ReadonlyInput
+                heading="Stock"
+                value={modelParameters.stockName}
+              />
+              <ReadonlyInput
                 heading="Price per share (PPS)"
                 symbol={modelParameters.currencySymbol}
                 value={modelParameters.pricePerShare}
               />
               <ReadonlyInput
                 heading="Earnings per share (EPS)"
+                symbol={modelParameters.currencySymbol}
                 value={modelParameters.earningsPerShare}
               />
               <ReadonlyInput

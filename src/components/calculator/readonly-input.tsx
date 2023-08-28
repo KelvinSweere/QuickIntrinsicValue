@@ -1,6 +1,7 @@
 import { floatToString } from '@/utils/calculator-service';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { Box, Flex, Input, Text, Tooltip } from '@chakra-ui/react';
+import { useState } from 'react';
 
 interface IReadonlyInputProps {
   heading: string;
@@ -15,13 +16,25 @@ const ReadonlyInput = ({
   value,
   tooltipText,
 }: IReadonlyInputProps) => {
+  const [tooltipVisibe, setTooltipVisibe] = useState(false);
+
+  const toggleTooltipVisible = () => {
+    setTooltipVisibe(!tooltipVisibe);
+  };
+
   return (
     <Box>
       <Text fontWeight="bold">
         {heading}
         {tooltipText && (
-          <Tooltip label={tooltipText}>
-            <InfoOutlineIcon ml="1" w={3} h={4} color="gray.500" />
+          <Tooltip label={tooltipText} isOpen={tooltipVisibe}>
+            <InfoOutlineIcon
+              ml="1"
+              w={3}
+              h={4}
+              color="gray.500"
+              onClick={toggleTooltipVisible}
+            />
           </Tooltip>
         )}
       </Text>
@@ -34,7 +47,9 @@ const ReadonlyInput = ({
         )}
         <Input
           isReadOnly
-          value={(value as number) ? floatToString(value as number) : value}
+          value={
+            typeof value === 'number' ? floatToString(value as number) : value
+          }
         />
       </Flex>
     </Box>
