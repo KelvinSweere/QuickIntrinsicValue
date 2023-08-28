@@ -28,6 +28,7 @@ const CalculatorParameters = ({
               />
               <ReadonlyInput
                 heading="Earnings per share (EPS)"
+                symbol={modelParameters.currencySymbol}
                 value={modelParameters.earningsPerShare}
               />
               <ReadonlyInput
