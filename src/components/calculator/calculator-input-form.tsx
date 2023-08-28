@@ -108,6 +108,12 @@ const CalculatorInputForm = ({
             type="text"
             value={stockSymbol}
             onChange={(e) => setStockSymbol(e.target.value)}
+            onKeyDown={(e) => {
+              console.log(e.key);
+              if (e.key === 'Enter') {
+                calculateValues();
+              }
+            }}
           />
           <Button
             ml={4}
