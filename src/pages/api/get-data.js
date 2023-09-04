@@ -26,7 +26,7 @@ export default async (req, res) => {
     )?.growth;
     const pricePerShare = result.price.regularMarketPrice;
     const earningsPerShare = result.defaultKeyStatistics.trailingEps;
-    const currentYieldOfBond = 2.57;
+    const currentYieldOfBond = 4.87;
     const currencySymbol = result.price.currencySymbol;
     const dividendYield = result.summaryDetail.dividendYield ?? 0;
     const peRation = result.summaryDetail.trailingPE;
