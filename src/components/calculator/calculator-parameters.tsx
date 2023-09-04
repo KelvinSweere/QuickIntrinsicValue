@@ -41,7 +41,7 @@ const CalculatorParameters = ({
                 value={modelParameters.growthRate}
               />
               <ReadonlyInput
-                heading="Yield of AAA bond (YB)"
+                heading="Yield of AAA 5 years bond (YB)"
                 symbol="%"
                 value={modelParameters.currentYieldOfBond}
               />

@@ -13,6 +13,9 @@ export default async (req, res) => {
         'financialData',
       ],
     });
+    const aaaBondYieldResult = await yahooFinance.quoteSummary('^FVX', {
+      modules: ['price'],
+    });
 
     const stockName = result?.price?.longName ?? '';
     const freeCashFlow = result.financialData.freeCashflow;
@@ -26,7 +29,7 @@ export default async (req, res) => {
     )?.growth;
     const pricePerShare = result.price.regularMarketPrice;
     const earningsPerShare = result.defaultKeyStatistics.trailingEps;
-    const currentYieldOfBond = 4.87;
+    const currentYieldOfBond = aaaBondYieldResult.price.regularMarketPrice;
     const currencySymbol = result.price.currencySymbol;
     const dividendYield = result.summaryDetail.dividendYield ?? 0;
     const peRation = result.summaryDetail.trailingPE;
