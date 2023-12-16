@@ -45,7 +45,7 @@ const CalculatorOutputRegular = ({
   };
 
   return (
-    <Box mt={4} bg="white">
+    <Box bg="white">
       <Table variant="simple" colorScheme="red">
         <Thead>
           <Tr>
