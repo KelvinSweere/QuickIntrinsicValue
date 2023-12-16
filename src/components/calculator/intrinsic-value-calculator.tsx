@@ -89,12 +89,12 @@ const IntrinsicValueCalculator = () => {
     >
       <Box textAlign="center">
         <Heading fontSize="4xl" fontWeight="bold" mb={4}>
-          <GradientText>Quick Intrinsic Value Calculator</GradientText>
+          <GradientText>Quick Intrinsic Value</GradientText>
         </Heading>
         <Text fontSize="xl" color="gray.600">
-          Unlock the potential of stock valuation with our Graham Formula &
-          Peter Lynch Valuation Calculator. Effortlessly compute the intrinsic
-          value of stocks by simply entering the Yahoo Finance stock symbol.
+          Quickly calculate the intrinsic value of stocks by using the Graham
+          Formula, Discounted Cash Flow (DCF) & Peter Lynch Valuation by simply
+          entering the Yahoo Finance stock symbol.
         </Text>
       </Box>
 
