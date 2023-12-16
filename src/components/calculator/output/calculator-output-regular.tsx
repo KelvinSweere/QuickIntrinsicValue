@@ -35,6 +35,15 @@ const CalculatorOutputRegular = ({
     }
   };
 
+  const getLabelForIntrinsicValueWithoutMarginOfSafety = (
+    currencySymbol: string,
+    intrinsicValue: number
+  ): string => {
+    return `Intrinsic value without margin of safety is ${currencySymbol}${floatToString(
+      intrinsicValue
+    )}`;
+  };
+
   return (
     <Box mt={4} bg="white">
       <Table variant="simple" colorScheme="red">
@@ -45,10 +54,23 @@ const CalculatorOutputRegular = ({
             </Th>
             <Th textAlign="center" p={2}>
               Acceptable buy price Graham
+              <Tooltip
+                label={getLabelForIntrinsicValueWithoutMarginOfSafety(
+                  modelParameters.currencySymbol,
+                  intrinsicValue.grahamValutation.intrinsicValue
+                )}
+              >
+                <InfoOutlineIcon ml="1" w={3} h={4} color="gray.500" />
+              </Tooltip>
             </Th>
             <Th textAlign="center" p={2}>
               Acceptable buy price DSF
-              <Tooltip label="Discounted Cash Flow">
+              <Tooltip
+                label={getLabelForIntrinsicValueWithoutMarginOfSafety(
+                  modelParameters.currencySymbol,
+                  intrinsicValue.dcfValutation.intrinsicValue
+                )}
+              >
                 <InfoOutlineIcon ml="1" w={3} h={4} color="gray.500" />
               </Tooltip>
             </Th>
