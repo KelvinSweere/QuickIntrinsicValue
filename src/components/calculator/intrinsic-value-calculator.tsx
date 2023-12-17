@@ -13,6 +13,7 @@ import {
   Heading,
   Text,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { calculateIntrinsicValue } from '../../utils/calculator-service';
@@ -30,6 +31,9 @@ const IntrinsicValueCalculator = () => {
     defaultIntrinsicValue
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const toast = useToast({
+    position: 'bottom-right',
+  });
 
   const calculatorWidth = useBreakpointValue({
     base: '95vw',
@@ -57,6 +61,18 @@ const IntrinsicValueCalculator = () => {
       )
     );
   }, [modelParameters]);
+
+  useEffect(() => {
+    if (!intrinsicValue.dcfValutation.valid) {
+      toast({
+        title: 'Error',
+        description: "Discounted Cash Flow (DCF) couldn't be calculated",
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [intrinsicValue.dcfValutation.valid]);
 
   const clearValues = () => {
     setStockSymbol('');

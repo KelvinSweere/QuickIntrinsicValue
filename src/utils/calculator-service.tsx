@@ -22,6 +22,26 @@ export function calculateDiscountedCashFlowValuation(
   totalDebt: number,
   shareOutstanding: number
 ): IIntrinsicValue {
+  if (
+    Number.isNaN(pricePerShare) ||
+    Number.isNaN(growthRate) ||
+    Number.isNaN(marginOfSafety) ||
+    Number.isNaN(freeCashFlow) ||
+    Number.isNaN(discountRate) ||
+    Number.isNaN(perpetualGrowthRate) ||
+    Number.isNaN(cashAndEquivalents) ||
+    Number.isNaN(totalDebt) ||
+    Number.isNaN(shareOutstanding)
+  ) {
+    return {
+      intrinsicValue: 0,
+      differencePercentage: 0,
+      acceptableBuyPrice: 0,
+      belowIntrinsicValue: false,
+      valid: false,
+    };
+  }
+
   const years = 5;
   const freeCashFlows: number[] = [];
   for (let i = 0; i < years; i++) {
@@ -56,6 +76,7 @@ export function calculateDiscountedCashFlowValuation(
     differencePercentage: parseFloat(upside.toFixed(2)),
     acceptableBuyPrice: parseFloat(acceptableBuyPrice.toFixed(2)),
     belowIntrinsicValue: belowIntrinsicValue,
+    valid: true,
   };
 }
 
@@ -86,6 +107,7 @@ function calculateGrahamValuation(
     differencePercentage: differencePercentage,
     acceptableBuyPrice: acceptableBuyPrice,
     belowIntrinsicValue: belowIntrinsicValue,
+    valid: true,
   };
 }
 
