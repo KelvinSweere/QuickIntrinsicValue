@@ -1,5 +1,8 @@
 import { ICalculatedModel } from '@/types/calculated-model';
-import { IIntrinsicValue } from '@/types/intrinsic-value';
+import {
+  IIntrinsicValue,
+  IntrinsicValueDefault,
+} from '@/types/intrinsic-value';
 
 function getEnterpriseValue(discountRate: number, cashFlows: number[]) {
   const npv = cashFlows.reduce(
@@ -22,6 +25,22 @@ export function calculateDiscountedCashFlowValuation(
   totalDebt: number,
   shareOutstanding: number
 ): IIntrinsicValue {
+  if (
+    Number.isNaN(pricePerShare) ||
+    Number.isNaN(growthRate) ||
+    Number.isNaN(marginOfSafety) ||
+    Number.isNaN(freeCashFlow) ||
+    Number.isNaN(discountRate) ||
+    Number.isNaN(perpetualGrowthRate) ||
+    Number.isNaN(cashAndEquivalents) ||
+    Number.isNaN(totalDebt) ||
+    Number.isNaN(shareOutstanding)
+  ) {
+    throw new Error(
+      "Can't calculate DCF value because of invalid input parameters."
+    );
+  }
+
   const years = 5;
   const freeCashFlows: number[] = [];
   for (let i = 0; i < years; i++) {
@@ -56,6 +75,7 @@ export function calculateDiscountedCashFlowValuation(
     differencePercentage: parseFloat(upside.toFixed(2)),
     acceptableBuyPrice: parseFloat(acceptableBuyPrice.toFixed(2)),
     belowIntrinsicValue: belowIntrinsicValue,
+    valid: true,
   };
 }
 
@@ -86,6 +106,7 @@ function calculateGrahamValuation(
     differencePercentage: differencePercentage,
     acceptableBuyPrice: acceptableBuyPrice,
     belowIntrinsicValue: belowIntrinsicValue,
+    valid: true,
   };
 }
 
@@ -126,17 +147,22 @@ export function calculateIntrinsicValue(
     marginOfSafety
   );
 
-  const dcfValuation = calculateDiscountedCashFlowValuation(
-    pricePerShare,
-    growthRate,
-    marginOfSafety,
-    freeCashFlow,
-    discountRate,
-    perpetualGrowthRate,
-    cashAndEquivalents,
-    totalDebt,
-    shareOutstanding
-  );
+  let dcfValuation: IIntrinsicValue = IntrinsicValueDefault;
+  try {
+    dcfValuation = calculateDiscountedCashFlowValuation(
+      pricePerShare,
+      growthRate,
+      marginOfSafety,
+      freeCashFlow,
+      discountRate,
+      perpetualGrowthRate,
+      cashAndEquivalents,
+      totalDebt,
+      shareOutstanding
+    );
+  } catch (e) {
+    dcfValuation.valid = false;
+  }
 
   const peterLynchValutation = calculatePeterLynchValutation(
     earningsPerShare,

@@ -3,6 +3,7 @@ export interface IIntrinsicValue {
   acceptableBuyPrice: number;
   differencePercentage: number;
   belowIntrinsicValue: boolean;
+  valid: boolean;
 }
 
 export const IntrinsicValueDefault: IIntrinsicValue = {
@@ -10,4 +11,5 @@ export const IntrinsicValueDefault: IIntrinsicValue = {
   acceptableBuyPrice: 0,
   differencePercentage: 0,
   belowIntrinsicValue: false,
+  valid: true,
 };
