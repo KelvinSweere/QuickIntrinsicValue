@@ -1,8 +1,5 @@
 import { ICalculatedModel } from '@/types/calculated-model';
-import {
-  IIntrinsicValue,
-  IntrinsicValueDefault,
-} from '@/types/intrinsic-value';
+import { IIntrinsicValue } from '@/types/intrinsic-value';
 
 function getEnterpriseValue(discountRate: number, cashFlows: number[]) {
   const npv = cashFlows.reduce(
@@ -36,9 +33,13 @@ export function calculateDiscountedCashFlowValuation(
     Number.isNaN(totalDebt) ||
     Number.isNaN(shareOutstanding)
   ) {
-    throw new Error(
-      "Can't calculate DCF value because of invalid input parameters."
-    );
+    return {
+      intrinsicValue: 0,
+      differencePercentage: 0,
+      acceptableBuyPrice: 0,
+      belowIntrinsicValue: false,
+      valid: false,
+    };
   }
 
   const years = 5;
@@ -147,22 +148,17 @@ export function calculateIntrinsicValue(
     marginOfSafety
   );
 
-  let dcfValuation: IIntrinsicValue = IntrinsicValueDefault;
-  try {
-    dcfValuation = calculateDiscountedCashFlowValuation(
-      pricePerShare,
-      growthRate,
-      marginOfSafety,
-      freeCashFlow,
-      discountRate,
-      perpetualGrowthRate,
-      cashAndEquivalents,
-      totalDebt,
-      shareOutstanding
-    );
-  } catch (e) {
-    dcfValuation.valid = false;
-  }
+  const dcfValuation = calculateDiscountedCashFlowValuation(
+    pricePerShare,
+    growthRate,
+    marginOfSafety,
+    freeCashFlow,
+    discountRate,
+    perpetualGrowthRate,
+    cashAndEquivalents,
+    totalDebt,
+    shareOutstanding
+  );
 
   const peterLynchValutation = calculatePeterLynchValutation(
     earningsPerShare,

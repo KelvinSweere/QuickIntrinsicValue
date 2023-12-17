@@ -60,7 +60,9 @@ const IntrinsicValueCalculator = () => {
         Number(modelParameters.sharesOutstanding)
       )
     );
+  }, [modelParameters]);
 
+  useEffect(() => {
     if (!intrinsicValue.dcfValutation.valid) {
       toast({
         title: 'Error',
@@ -70,7 +72,7 @@ const IntrinsicValueCalculator = () => {
         isClosable: true,
       });
     }
-  }, [modelParameters]);
+  }, [intrinsicValue.dcfValutation.valid]);
 
   const clearValues = () => {
     setStockSymbol('');
